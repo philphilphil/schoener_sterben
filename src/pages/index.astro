@@ -1,0 +1,38 @@
+---
+import ListLayout from '../layouts/ListLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', (entry) => {
+  return entry.id.startsWith('posts/') && !entry.data.draft;
+});
+const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+function estimateReadingTime(body: string): number {
+  const words = body.split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+---
+<ListLayout title="" description="Oper für alle!">
+  <article class="first-entry home-info">
+    <div class="entry-content">
+      Kurze Meinungsstücke über den Ort, an dem am schönsten gestorben wird: die Oper.
+    </div>
+  </article>
+
+  <h2 class="posts-heading">Beiträge</h2>
+
+  {posts.map((post) => {
+    const slug = post.data.slug || post.id.split('/').pop()?.replace(/\.mdx?$/, '');
+    return (
+      <PostCard
+        title={post.data.title}
+        href={`/posts/${slug}/`}
+        summary={post.data.summary}
+        date={post.data.date}
+        readingTime={post.body ? estimateReadingTime(post.body) : undefined}
+        draft={post.data.draft}
+      />
+    );
+  })}
+</ListLayout>

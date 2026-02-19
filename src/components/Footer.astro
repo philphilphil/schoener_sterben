@@ -1,0 +1,83 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <span>&copy; {year} <a href="/">Schöner Sterben</a></span>
+  {' · '}
+  <span>
+    Theme Vorhang,
+    powered by <a href="https://astro.build/" rel="noopener noreferrer" target="_blank">Astro</a>
+  </span>
+  <br>
+  <span>
+    <a href="/impressum/">Impressum</a>
+    {' · '}
+    <a href="/datenschutz/">Datenschutz</a>
+  </span>
+</footer>
+
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+    <path d="M12 6H0l6-6z" />
+  </svg>
+</a>
+
+<script>
+  // Menu scroll position
+  let menu = document.getElementById('menu');
+  if (menu) {
+    const scrollPosition = localStorage.getItem("menu-scroll-position");
+    if (scrollPosition) {
+      menu.scrollLeft = parseInt(scrollPosition, 10);
+    }
+    menu.onscroll = function () {
+      localStorage.setItem("menu-scroll-position", String(menu!.scrollLeft));
+    }
+  }
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault();
+      var id = (this as HTMLAnchorElement).getAttribute("href")!.substr(1);
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelector(`[id='${decodeURIComponent(id)}']`)?.scrollIntoView({
+          behavior: "smooth"
+        });
+      } else {
+        document.querySelector(`[id='${decodeURIComponent(id)}']`)?.scrollIntoView();
+      }
+      if (id === "top") {
+        history.replaceState(null, null as any, " ");
+      } else {
+        history.pushState(null, null as any, `#${id}`);
+      }
+    });
+  });
+
+  // Scroll to top button
+  var mybutton = document.getElementById("top-link");
+  window.onscroll = function () {
+    if (mybutton) {
+      if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+        mybutton.style.visibility = "visible";
+        mybutton.style.opacity = "1";
+      } else {
+        mybutton.style.visibility = "hidden";
+        mybutton.style.opacity = "0";
+      }
+    }
+  };
+
+  // Theme toggle
+  document.getElementById("theme-toggle")?.addEventListener("click", () => {
+    const html = document.querySelector("html")!;
+    if (html.dataset.theme === "dark") {
+      html.dataset.theme = 'light';
+      localStorage.setItem("pref-theme", 'light');
+    } else {
+      html.dataset.theme = 'dark';
+      localStorage.setItem("pref-theme", 'dark');
+    }
+  });
+</script>

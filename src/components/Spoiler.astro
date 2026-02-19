@@ -1,0 +1,12 @@
+---
+interface Props {
+  title?: string;
+}
+const { title = 'Spoiler' } = Astro.props;
+---
+<details class="spoiler">
+  <summary>{title}</summary>
+  <div class="spoiler-content">
+    <slot />
+  </div>
+</details>

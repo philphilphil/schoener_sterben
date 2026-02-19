@@ -1,0 +1,73 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PostMeta from '../components/PostMeta.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  tags?: string[];
+  summary?: string;
+  readingTime?: number;
+  draft?: boolean;
+  hideMeta?: boolean;
+  prevPost?: { title: string; href: string } | null;
+  nextPost?: { title: string; href: string } | null;
+}
+
+const { title, date, tags = [], summary, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
+---
+<BaseLayout title={title} description={summary}>
+  <article class="post-single">
+    <header class="post-header">
+      <Breadcrumbs items={[{ label: 'Beiträge', href: '/' }]} />
+      <h1 class="post-title entry-hint-parent">
+        {title}
+        {draft && (
+          <span class="entry-hint" title="Draft">
+            <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+              <path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+            </svg>
+          </span>
+        )}
+      </h1>
+      {!hideMeta && (
+        <div class="post-meta">
+          <PostMeta date={date} readingTime={readingTime} />
+        </div>
+      )}
+    </header>
+
+    <div class="post-content">
+      <slot />
+    </div>
+
+    <footer class="post-footer">
+      {tags.length > 0 && (
+        <ul class="post-tags">
+          {tags.map((tag) => (
+            <li><a href={`/tags/${tag.toLowerCase()}/`}>{tag}</a></li>
+          ))}
+        </ul>
+      )}
+      {(prevPost || nextPost) && (
+        <nav class="paginav">
+          {prevPost && (
+            <a class="prev" href={prevPost.href}>
+              <span class="title">&laquo; Vorherige Seite</span>
+              <br>
+              <span>{prevPost.title}</span>
+            </a>
+          )}
+          {nextPost && (
+            <a class="next" href={nextPost.href}>
+              <span class="title">Nächste Seite &raquo;</span>
+              <br>
+              <span>{nextPost.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+    </footer>
+  </article>
+</BaseLayout>

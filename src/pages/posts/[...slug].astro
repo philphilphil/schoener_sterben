@@ -1,0 +1,61 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('posts');
+  const paths: any[] = [];
+
+  for (const post of allPosts) {
+    // post.id is like "posts/schoener-sterben"
+    const filename = post.id.split('/').pop()!;
+    const slug = post.data.slug || filename;
+
+    paths.push({
+      params: { slug },
+      props: { post },
+    });
+  }
+
+  return paths;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// Get sibling posts for navigation
+const allPosts = await getCollection('posts', (entry: any) => {
+  return entry.id.startsWith('posts/') && !entry.data.draft;
+});
+const sorted = allPosts.sort((a: any, b: any) => b.data.date.valueOf() - a.data.date.valueOf());
+const currentIndex = sorted.findIndex((p: any) => p.id === post.id);
+
+function getPostSlug(p: any): string {
+  return p.data.slug || p.id.split('/').pop() || '';
+}
+
+const prevPost = currentIndex < sorted.length - 1
+  ? { title: sorted[currentIndex + 1].data.title, href: `/posts/${getPostSlug(sorted[currentIndex + 1])}/` }
+  : null;
+const nextPost = currentIndex > 0
+  ? { title: sorted[currentIndex - 1].data.title, href: `/posts/${getPostSlug(sorted[currentIndex - 1])}/` }
+  : null;
+
+function estimateReadingTime(body: string): number {
+  const words = body.split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+---
+<PostLayout
+  title={post.data.title}
+  date={post.data.date}
+  tags={post.data.tags}
+  summary={post.data.summary}
+  readingTime={post.body ? estimateReadingTime(post.body) : undefined}
+  draft={post.data.draft}
+  hideMeta={post.data.hideMeta}
+  prevPost={prevPost}
+  nextPost={nextPost}
+>
+  <Content />
+</PostLayout>

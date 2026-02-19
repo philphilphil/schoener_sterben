@@ -1,0 +1,12 @@
+---
+interface Props {
+  title?: string;
+}
+const { title = 'Die Handlung' } = Astro.props;
+---
+<details class="handlung" open>
+  <summary class="handlung-label">{title}</summary>
+  <div class="handlung-content">
+    <slot />
+  </div>
+</details>
