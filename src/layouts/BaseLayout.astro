@@ -12,8 +12,6 @@ interface Props {
 const { title, description = 'Oper für alle!', bodyClass = '' } = Astro.props;
 const fullTitle = title ? `${title} | Schöner Sterben` : 'Schöner Sterben';
 const currentPath = Astro.url.pathname;
-const isHomepage = currentPath === '/';
-const allBodyClasses = [bodyClass, isHomepage ? 'homepage' : ''].filter(Boolean).join(' ');
 ---
 <!DOCTYPE html>
 <html lang="de" dir="auto" data-theme="dark">
@@ -26,7 +24,7 @@ const allBodyClasses = [bodyClass, isHomepage ? 'homepage' : ''].filter(Boolean)
   <meta name="description" content={description}>
   <meta name="author" content="Phil Baum">
   <link rel="canonical" href={Astro.url.href}>
-  <meta name="theme-color" content="#0a0505">
+  <meta name="theme-color" content="#111111">
   <noscript>
     <style is:inline>
       #theme-toggle,
@@ -41,7 +39,7 @@ const allBodyClasses = [bodyClass, isHomepage ? 'homepage' : ''].filter(Boolean)
     }
   </script>
 </head>
-<body class={allBodyClasses} id="top">
+<body class={bodyClass} id="top">
   <Header currentPath={currentPath} />
   <main class="main">
     <slot />

@@ -1,0 +1,96 @@
+---
+import ListLayout from '../layouts/ListLayout.astro';
+import PostMeta from '../components/PostMeta.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', (entry) => {
+  return entry.id.startsWith('posts/') && !entry.data.draft;
+});
+
+// --- Tags ---
+const tagCounts = new Map<string, number>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+  }
+}
+const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+
+// --- Archive ---
+const posts = [...allPosts].sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+type GroupedPosts = Map<number, Map<string, typeof posts>>;
+const grouped: GroupedPosts = new Map();
+
+for (const post of posts) {
+  const year = post.data.date.getFullYear();
+  const month = post.data.date.toLocaleDateString('de-DE', { month: 'long' });
+  if (!grouped.has(year)) grouped.set(year, new Map());
+  const yearMap = grouped.get(year)!;
+  if (!yearMap.has(month)) yearMap.set(month, []);
+  yearMap.get(month)!.push(post);
+}
+
+function estimateReadingTime(body: string): number {
+  const words = body.split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
+---
+<ListLayout title="Archiv">
+  <header class="page-header">
+    <h1>Tags</h1>
+  </header>
+  <ul class="terms-tags">
+    {sortedTags.map(([tag, count]) => (
+      <li>
+        <a href={`/tags/${tag.toLowerCase()}/`}>
+          {tag} <sup><strong><sup>{count}</sup></strong></sup>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <header class="page-header" style="margin-top: 2rem;">
+    <h1>Archiv</h1>
+  </header>
+
+  {[...grouped.entries()].map(([year, months]) => (
+    <div class="archive-year">
+      <h2 class="archive-year-header" id={String(year)}>
+        <a class="archive-header-link" href={`#${year}`}>{year}</a>
+        <sup class="archive-count">&nbsp;{[...months.values()].reduce((acc, p) => acc + p.length, 0)}</sup>
+      </h2>
+      {[...months.entries()].map(([month, monthPosts]) => (
+        <div class="archive-month">
+          <h3 class="archive-month-header" id={`${year}-${month}`}>
+            <a class="archive-header-link" href={`#${year}-${month}`}>{month}</a>
+            <sup class="archive-count">&nbsp;{monthPosts.length}</sup>
+          </h3>
+          <div class="archive-posts">
+            {monthPosts.map((post) => {
+              const slug = post.data.slug || post.id.split('/').pop()?.replace(/\.mdx?$/, '');
+              return (
+                <div class="archive-entry">
+                  <h3 class="archive-entry-title entry-hint-parent">
+                    {post.data.title}
+                    {post.data.draft && (
+                      <span class="entry-hint" title="Draft">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="15" viewBox="0 -960 960 960" fill="currentColor">
+                          <path d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+                        </svg>
+                      </span>
+                    )}
+                  </h3>
+                  <div class="archive-meta">
+                    <PostMeta date={post.data.date} readingTime={post.body ? estimateReadingTime(post.body) : undefined} />
+                  </div>
+                  <a class="entry-link" aria-label={`post link to ${post.data.title}`} href={`/posts/${slug}/`}></a>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  ))}
+</ListLayout>

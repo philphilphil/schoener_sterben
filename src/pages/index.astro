@@ -15,61 +15,52 @@ function estimateReadingTime(body: string): number {
 
 const [featured, ...rest] = posts;
 const featuredSlug = featured?.data.slug || featured?.id.split('/').pop()?.replace(/\.mdx?$/, '');
+
+const editionDate = new Date().toLocaleDateString('de-DE', {
+  year: 'numeric',
+  month: 'long',
+});
 ---
 <BaseLayout title="" description="Oper für alle!">
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-glow"></div>
-    <h1 class="hero-title">Schöner Sterben</h1>
-    <p class="hero-subtitle">Oper für alle!</p>
-    <div class="hero-ornament">
-      <span></span>
-      <span class="diamond"></span>
-      <span></span>
+  <div class="editorial-home">
+    <div class="edition-line">
+      <span>{editionDate}</span>
+      <span>{posts.length} Beiträge</span>
     </div>
-  </section>
 
-  <!-- Featured Post -->
-  {featured && (
-    <section class="featured">
-      <div class="featured-label">Neuester Beitrag</div>
-      <a href={`/posts/${featuredSlug}/`} class="featured-link">
-        <h2 class="featured-title">{featured.data.title}</h2>
-        {featured.data.summary && (
-          <blockquote class="featured-quote">{featured.data.summary}</blockquote>
-        )}
-        <div class="featured-meta">
-          <PostMeta date={featured.data.date} readingTime={featured.body ? estimateReadingTime(featured.body) : undefined} />
-        </div>
-      </a>
-    </section>
-  )}
+    {featured && (
+      <section class="lead-article">
+        <div class="lead-label">Neuester Beitrag</div>
+        <a href={`/posts/${featuredSlug}/`} class="lead-link">
+          <h2 class="lead-title">{featured.data.title}</h2>
+          {featured.data.summary && (
+            <p class="lead-summary">{featured.data.summary}</p>
+          )}
+          <div class="lead-meta">
+            <PostMeta date={featured.data.date} readingTime={featured.body ? estimateReadingTime(featured.body) : undefined} />
+          </div>
+        </a>
+      </section>
+    )}
 
-  <!-- Remaining Posts -->
-  {rest.length > 0 && (
-    <section class="post-list">
-      <div class="section-heading">
-        <span class="section-rule"></span>
-        <span class="section-text">Weitere Beiträge</span>
-        <span class="section-rule"></span>
-      </div>
-      {rest.map((post) => {
-        const slug = post.data.slug || post.id.split('/').pop()?.replace(/\.mdx?$/, '');
-        return (
-          <a href={`/posts/${slug}/`} class="post-list-item">
-            <div class="post-list-date">
-              <PostMeta date={post.data.date} />
-            </div>
-            <div class="post-list-body">
-              <h3 class="post-list-title">{post.data.title}</h3>
-              {post.data.summary && (
-                <p class="post-list-summary">{post.data.summary}</p>
-              )}
-            </div>
-            <span class="post-list-arrow">&rarr;</span>
-          </a>
-        );
-      })}
-    </section>
-  )}
+    {rest.length > 0 && (
+      <section class="post-index">
+        <div class="post-index-label">Weitere Beiträge</div>
+        {rest.map((post, i) => {
+          const slug = post.data.slug || post.id.split('/').pop()?.replace(/\.mdx?$/, '');
+          return (
+            <a href={`/posts/${slug}/`} class="post-index-item">
+              <span class="post-index-number">{String(i + 2).padStart(2, '0')}</span>
+              <div class="post-index-body">
+                <h3 class="post-index-title">{post.data.title}</h3>
+                <div class="post-index-meta">
+                  <PostMeta date={post.data.date} />
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </section>
+    )}
+  </div>
 </BaseLayout>
