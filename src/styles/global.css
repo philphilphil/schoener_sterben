@@ -1222,21 +1222,24 @@ img.in-text {
 /* ===== TLDR ===== */
 .tldr {
     margin: 0 0 var(--content-gap) 0;
-    padding: 1rem 1.25rem;
+    padding: 0.5rem 0.85rem;
     background: var(--entry);
-    border-left: 3px solid var(--accent);
+    border-left: 2px solid var(--accent);
     border-radius: var(--radius);
+    font-size: 0.85em;
+    line-height: 1.4;
+    opacity: 0.8;
 }
 
 .tldr-label {
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 0.8em;
+    font-size: 0.75em;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--accent);
     display: block;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
 }
 
 .tldr p {
