@@ -53,3 +53,8 @@ Import path from `src/content/posts/`: `../../components/ComponentName.astro`
 - `src/layouts/BaseLayout.astro` — Root HTML shell
 - `src/layouts/PostLayout.astro` — Single post layout with breadcrumbs, meta, prev/next nav
 - `src/pages/posts/[...slug].astro` — Individual post rendering
+
+## MCP Tools
+
+- **Playwright**: Use the Playwright MCP for browser automation — visually inspecting pages, taking screenshots, clicking elements, and verifying rendered output. Start the dev server (`npm run dev`) before navigating to `http://localhost:4321`.
+- **Astro Docs**: Use the `search_astro_docs` MCP tool to look up Astro framework documentation when unsure about APIs, components, or configuration.
