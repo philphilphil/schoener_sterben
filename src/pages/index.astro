@@ -1,6 +1,6 @@
 ---
-import ListLayout from '../layouts/ListLayout.astro';
-import PostCard from '../components/PostCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostMeta from '../components/PostMeta.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('posts', (entry) => {
@@ -12,27 +12,64 @@ function estimateReadingTime(body: string): number {
   const words = body.split(/\s+/).length;
   return Math.max(1, Math.ceil(words / 200));
 }
+
+const [featured, ...rest] = posts;
+const featuredSlug = featured?.data.slug || featured?.id.split('/').pop()?.replace(/\.mdx?$/, '');
 ---
-<ListLayout title="" description="Oper für alle!">
-  <article class="first-entry home-info">
-    <div class="entry-content">
-      Kurze Meinungsstücke über den Ort, an dem am schönsten gestorben wird: die Oper.
+<BaseLayout title="" description="Oper für alle!">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <h1 class="hero-title">Schöner Sterben</h1>
+    <p class="hero-subtitle">Oper für alle!</p>
+    <div class="hero-ornament">
+      <span></span>
+      <span class="diamond"></span>
+      <span></span>
     </div>
-  </article>
+  </section>
 
-  <h2 class="posts-heading">Beiträge</h2>
+  <!-- Featured Post -->
+  {featured && (
+    <section class="featured">
+      <div class="featured-label">Neuester Beitrag</div>
+      <a href={`/posts/${featuredSlug}/`} class="featured-link">
+        <h2 class="featured-title">{featured.data.title}</h2>
+        {featured.data.summary && (
+          <blockquote class="featured-quote">{featured.data.summary}</blockquote>
+        )}
+        <div class="featured-meta">
+          <PostMeta date={featured.data.date} readingTime={featured.body ? estimateReadingTime(featured.body) : undefined} />
+        </div>
+      </a>
+    </section>
+  )}
 
-  {posts.map((post) => {
-    const slug = post.data.slug || post.id.split('/').pop()?.replace(/\.mdx?$/, '');
-    return (
-      <PostCard
-        title={post.data.title}
-        href={`/posts/${slug}/`}
-        summary={post.data.summary}
-        date={post.data.date}
-        readingTime={post.body ? estimateReadingTime(post.body) : undefined}
-        draft={post.data.draft}
-      />
-    );
-  })}
-</ListLayout>
+  <!-- Remaining Posts -->
+  {rest.length > 0 && (
+    <section class="post-list">
+      <div class="section-heading">
+        <span class="section-rule"></span>
+        <span class="section-text">Weitere Beiträge</span>
+        <span class="section-rule"></span>
+      </div>
+      {rest.map((post) => {
+        const slug = post.data.slug || post.id.split('/').pop()?.replace(/\.mdx?$/, '');
+        return (
+          <a href={`/posts/${slug}/`} class="post-list-item">
+            <div class="post-list-date">
+              <PostMeta date={post.data.date} />
+            </div>
+            <div class="post-list-body">
+              <h3 class="post-list-title">{post.data.title}</h3>
+              {post.data.summary && (
+                <p class="post-list-summary">{post.data.summary}</p>
+              )}
+            </div>
+            <span class="post-list-arrow">&rarr;</span>
+          </a>
+        );
+      })}
+    </section>
+  )}
+</BaseLayout>

@@ -12,9 +12,11 @@ interface Props {
 const { title, description = 'Oper für alle!', bodyClass = '' } = Astro.props;
 const fullTitle = title ? `${title} | Schöner Sterben` : 'Schöner Sterben';
 const currentPath = Astro.url.pathname;
+const isHomepage = currentPath === '/';
+const allBodyClasses = [bodyClass, isHomepage ? 'homepage' : ''].filter(Boolean).join(' ');
 ---
 <!DOCTYPE html>
-<html lang="de" dir="auto" data-theme="light">
+<html lang="de" dir="auto" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,7 +26,7 @@ const currentPath = Astro.url.pathname;
   <meta name="description" content={description}>
   <meta name="author" content="Phil Baum">
   <link rel="canonical" href={Astro.url.href}>
-  <meta name="theme-color" content="#1a0a0a">
+  <meta name="theme-color" content="#0a0505">
   <noscript>
     <style is:inline>
       #theme-toggle,
@@ -34,12 +36,12 @@ const currentPath = Astro.url.pathname;
     </style>
   </noscript>
   <script is:inline>
-    if (localStorage.getItem("pref-theme") === "dark") {
-      document.querySelector("html").dataset.theme = 'dark';
+    if (localStorage.getItem("pref-theme") === "light") {
+      document.querySelector("html").dataset.theme = 'light';
     }
   </script>
 </head>
-<body class={bodyClass} id="top">
+<body class={allBodyClasses} id="top">
   <Header currentPath={currentPath} />
   <main class="main">
     <slot />
