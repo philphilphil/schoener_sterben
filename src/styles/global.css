@@ -1342,7 +1342,7 @@ h1>a>svg { display: inline; }
 }
 
 .browse-hero {
-    padding: 8rem 0 3rem;
+    padding: 8rem 0 1rem;
     text-align: center;
 }
 
@@ -1657,7 +1657,7 @@ noscript .nl-theme-toggle { display: none; }
 
     /* Browse / Archive */
     .browse-page { padding: 0 1.5rem 4rem; }
-    .browse-hero { padding: 7.5rem 0 2rem; }
+    .browse-hero { padding: 7.5rem 0 0.5rem; }
     .browse-month { flex-direction: column; gap: 0.5rem; }
     .browse-month-label { width: auto; padding-top: 0; }
     .browse-entry-time { display: none; }
