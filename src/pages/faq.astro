@@ -1,8 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { marked } from "marked";
+import { getEntry } from "astro:content";
 
-const raw = await import("../data/faq.md?raw").then((m) => m.default);
+const faqEntry = await getEntry("pages", "faq");
+const raw = faqEntry!.body!;
 const tokens = marked.lexer(raw);
 
 // Parse h2 = category, h3 = question, following content = answer

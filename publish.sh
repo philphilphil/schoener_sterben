@@ -4,25 +4,50 @@ set -euo pipefail
 OBSIDIAN_BLOG="/Users/phil/Notes/30 Kultur/31 Blog Schöner Sterben"
 ASTRO_POSTS="/Users/phil/Projects/schoener_sterben/src/content/posts"
 ASTRO_DATA="/Users/phil/Projects/schoener_sterben/src/data"
+ASTRO_PAGES="/Users/phil/Projects/schoener_sterben/src/content/pages"
 
 usage() {
   echo "Usage:"
   echo "  publish.sh faq              Copy FAQ from Obsidian to Astro"
+  echo "  publish.sh about            Copy About page from Obsidian to Astro"
   echo "  publish.sh post <name>      Publish a draft post from Obsidian to Astro"
   exit 1
 }
 
 publish_faq() {
-  local src="$OBSIDIAN_BLOG/faq.md"
-  local dest="$ASTRO_DATA/faq.md"
+  local src="$OBSIDIAN_BLOG/Pages/faq.md"
+  local dest="$ASTRO_PAGES/faq.md"
 
   if [[ ! -f "$src" ]]; then
     echo "Error: FAQ file not found at $src"
     exit 1
   fi
 
-  cp "$src" "$dest"
+  # Add empty frontmatter for content collection
+  {
+    echo "---"
+    echo "---"
+    cat "$src"
+  } > "$dest"
   echo "FAQ copied to $dest"
+}
+
+publish_about() {
+  local src="$OBSIDIAN_BLOG/Pages/about.md"
+  local dest="$ASTRO_PAGES/about.mdx"
+
+  if [[ ! -f "$src" ]]; then
+    echo "Error: About file not found at $src"
+    exit 1
+  fi
+
+  # Add empty frontmatter; ensure blank line after last import (required by MDX parser)
+  {
+    echo "---"
+    echo "---"
+    cat "$src"
+  } | sed '/^import /{ n; /^import /!{ /^$/!s/^/\n/; }; }' > "$dest"
+  echo "About page copied to $dest"
 }
 
 publish_post() {
@@ -102,6 +127,9 @@ publish_post() {
 case "$1" in
   faq)
     publish_faq
+    ;;
+  about)
+    publish_about
     ;;
   post)
     [[ $# -lt 2 ]] && { echo "Error: Missing post name. Usage: publish.sh post <name>"; exit 1; }
