@@ -1,0 +1,19 @@
+{
+  "name": "schoenersterben-astro",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && npx pagefind --site dist",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/rss": "^4.0.15",
+    "@astrojs/sitemap": "^3.7.0",
+    "abcjs": "^6.6.2",
+    "astro": "^5.17.2",
+    "marked": "^17.0.3"
+  }
+}

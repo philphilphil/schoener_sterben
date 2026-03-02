@@ -1,0 +1,21 @@
+---
+import ListLayout from '../../layouts/ListLayout.astro';
+import { getTagCounts } from '../../utils/posts';
+
+const tagCounts = await getTagCounts();
+const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+---
+<ListLayout title="Alle Tags" description="Alle Themen und Tags auf Schöner Sterben.">
+  <header class="browse-hero">
+    <h1 class="browse-title">Alle Tags</h1>
+  </header>
+  <ul class="terms-tags">
+    {sortedTags.map(([tag, count]) => (
+      <li>
+        <a href={`/tags/${tag.toLowerCase()}/`}>
+          {tag} <sup><strong>{count}</strong></sup>
+        </a>
+      </li>
+    ))}
+  </ul>
+</ListLayout>

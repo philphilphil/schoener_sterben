@@ -1,0 +1,47 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { render, type CollectionEntry } from 'astro:content';
+import { getPublishedPosts } from '../../utils/posts';
+import { estimateReadingTime } from '../../utils/readingTime';
+import { getPostSlug } from '../../utils/getPostSlug';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+
+  return posts.map((post, index) => {
+    const slug = getPostSlug(post);
+    const prevPost = index < posts.length - 1
+      ? { title: posts[index + 1].data.title, href: `/posts/${getPostSlug(posts[index + 1])}/` }
+      : null;
+    const nextPost = index > 0
+      ? { title: posts[index - 1].data.title, href: `/posts/${getPostSlug(posts[index - 1])}/` }
+      : null;
+    return {
+      params: { slug },
+      props: { post, prevPost, nextPost },
+    };
+  });
+}
+
+type Props = {
+  post: CollectionEntry<'posts'>;
+  prevPost: { title: string; href: string } | null;
+  nextPost: { title: string; href: string } | null;
+};
+const { post, prevPost, nextPost } = Astro.props;
+const { Content } = await render(post);
+---
+<PostLayout
+  title={post.data.title}
+  subtitle={post.data.subtitle}
+  date={post.data.date}
+  tags={post.data.tags}
+  summary={post.data.summary}
+  readingTime={post.body ? estimateReadingTime(post.body) : undefined}
+  draft={post.data.draft}
+  hideMeta={post.data.hideMeta}
+  prevPost={prevPost}
+  nextPost={nextPost}
+>
+  <Content />
+</PostLayout>

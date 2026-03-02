@@ -1,0 +1,28 @@
+---
+interface Props {
+  date: Date;
+  readingTime?: number;
+  author?: string;
+}
+
+const { date, readingTime, author = 'Phil Baum' } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('de-DE', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+<span title={date.toISOString()}>{formattedDate}</span>
+{readingTime !== undefined && (
+  <Fragment>
+    <span>&nbsp;·&nbsp;</span>
+    <span>{readingTime} Min. Lesezeit</span>
+  </Fragment>
+)}
+{author && (
+  <Fragment>
+    <span>&nbsp;·&nbsp;</span>
+    <span>{author}</span>
+  </Fragment>
+)}

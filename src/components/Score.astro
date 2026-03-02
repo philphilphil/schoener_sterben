@@ -1,0 +1,120 @@
+---
+interface Props {
+  abc: string;
+  title?: string;
+  playback?: boolean;
+}
+const { abc, title, playback = true } = Astro.props;
+const uniqueId = `notenbeispiel-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="notenbeispiel" id={uniqueId} data-abc={abc} data-playback={playback.toString()}>
+  <div class="notenbeispiel-notation"></div>
+  {playback && (
+    <div class="notenbeispiel-controls">
+      <button type="button" class="notenbeispiel-play" aria-label="Wiedergabe starten">
+        <svg class="notenbeispiel-icon-play" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <polygon points="6,4 20,12 6,20" fill="currentColor" />
+        </svg>
+        <svg class="notenbeispiel-icon-stop" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" style="display:none;">
+          <rect x="5" y="5" width="14" height="14" fill="currentColor" />
+        </svg>
+      </button>
+    </div>
+  )}
+  {title && <p class="notenbeispiel-titel">{title}</p>}
+</div>
+
+<script>
+  import abcjs from 'abcjs';
+
+  function initScores() {
+    const containers = document.querySelectorAll<HTMLDivElement>('.notenbeispiel');
+
+    for (const container of containers) {
+      if (container.dataset.initialized) continue;
+      container.dataset.initialized = 'true';
+
+      const abc = container.dataset.abc?.replace(/\\n/g, '\n');
+      if (!abc) continue;
+
+      const notationEl = container.querySelector<HTMLDivElement>('.notenbeispiel-notation');
+      if (!notationEl) continue;
+
+      const visualObj = abcjs.renderAbc(notationEl, abc, {
+        responsive: 'resize',
+        add_classes: true,
+      });
+
+      const enablePlayback = container.dataset.playback === 'true';
+      if (!enablePlayback) continue;
+
+      const button = container.querySelector<HTMLButtonElement>('.notenbeispiel-play');
+      if (!button) continue;
+
+      const iconPlay = button.querySelector<SVGElement>('.notenbeispiel-icon-play');
+      const iconStop = button.querySelector<SVGElement>('.notenbeispiel-icon-stop');
+      if (!iconPlay || !iconStop) continue;
+
+      let synth: InstanceType<typeof abcjs.synth.CreateSynth> | null = null;
+      let isPlaying = false;
+
+      function showPlayIcon() {
+        iconPlay!.style.display = '';
+        iconStop!.style.display = 'none';
+        button!.setAttribute('aria-label', 'Wiedergabe starten');
+        isPlaying = false;
+      }
+
+      function showStopIcon() {
+        iconPlay!.style.display = 'none';
+        iconStop!.style.display = '';
+        button!.setAttribute('aria-label', 'Wiedergabe stoppen');
+        isPlaying = true;
+      }
+
+      button.addEventListener('click', async () => {
+        if (isPlaying && synth) {
+          synth.stop();
+          showPlayIcon();
+          return;
+        }
+
+        try {
+          if (!abcjs.synth.activeAudioContext()) {
+            abcjs.synth.registerAudioContext(new AudioContext());
+          }
+          const audioContext = abcjs.synth.activeAudioContext();
+
+          synth = new abcjs.synth.CreateSynth();
+          await synth.init({
+            audioContext,
+            visualObj: visualObj[0],
+            millisecondsPerMeasure: visualObj[0].millisecondsPerMeasure(),
+          });
+          const { duration } = await synth.prime();
+
+          showStopIcon();
+          synth.start();
+
+          // Reset when playback ends
+          if (duration) {
+            setTimeout(() => {
+              if (isPlaying) showPlayIcon();
+            }, duration * 1000);
+          }
+        } catch (err) {
+          console.error('Score playback error:', err);
+          synth = null;
+          showPlayIcon();
+        }
+      });
+    }
+  }
+
+  // Init on first load
+  initScores();
+
+  // Re-init after Astro view transitions
+  document.addEventListener('astro:page-load', initScores);
+</script>

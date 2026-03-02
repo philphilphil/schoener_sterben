@@ -1,0 +1,11 @@
+---
+interface Props {
+  summary: string;
+  openByDefault?: boolean;
+}
+const { summary, openByDefault = false } = Astro.props;
+---
+<details open={openByDefault}>
+  <summary>{summary}</summary>
+  <slot />
+</details>

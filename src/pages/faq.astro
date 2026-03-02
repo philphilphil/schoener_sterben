@@ -1,0 +1,79 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { marked } from "marked";
+
+const raw = await import("../data/faq.md?raw").then((m) => m.default);
+const tokens = marked.lexer(raw);
+
+// Parse h2 = category, h3 = question, following content = answer
+type FaqCategory = { category: string; questions: { q: string; a: string }[] };
+const faqData: FaqCategory[] = [];
+let currentCategory: FaqCategory | null = null;
+let currentQuestion: { q: string; a: string } | null = null;
+const answerTokens: any[] = [];
+
+function flushAnswer() {
+  if (currentQuestion && answerTokens.length > 0) {
+    currentQuestion.a = marked.parser(answerTokens).trim();
+    answerTokens.length = 0;
+  }
+}
+
+for (const token of tokens) {
+  if (token.type === "heading" && token.depth === 2) {
+    flushAnswer();
+    currentQuestion = null;
+    currentCategory = { category: token.text, questions: [] };
+    faqData.push(currentCategory);
+  } else if (token.type === "heading" && token.depth === 3) {
+    flushAnswer();
+    currentQuestion = { q: token.text, a: "" };
+    currentCategory?.questions.push(currentQuestion);
+  } else if (currentQuestion) {
+    answerTokens.push(token);
+  }
+}
+flushAnswer();
+
+// Build JSON-LD
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqData.flatMap((cat) =>
+    cat.questions.map((q) => ({
+      "@type": "Question",
+      name: q.q,
+      acceptedAnswer: { "@type": "Answer", text: q.a.replace(/<[^>]*>/g, "") },
+    })),
+  ),
+};
+---
+
+<BaseLayout title="Opern-FAQ" description="Häufige Fragen rund um die Oper — von Dresscode bis Libretto.">
+  <div class="browse-page">
+    <header class="browse-hero">
+      <h1 class="browse-title">Opern-FAQ</h1>
+    </header>
+
+    <div class="faq-container">
+      {
+        faqData.map((category) => (
+          <section class="faq-category">
+            <p class="faq-category-title">{category.category}</p>
+            {category.questions.map((item) => (
+              <details class="faq-item">
+                <summary>{item.q}</summary>
+                <div class="faq-answer" set:html={item.a} />
+              </details>
+            ))}
+          </section>
+        ))
+      }
+    </div>
+  </div>
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd).replace(/</g, "\\u003c")}
+  />
+</BaseLayout>

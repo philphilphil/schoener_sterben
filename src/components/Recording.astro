@@ -1,0 +1,23 @@
+---
+interface Props {
+  typ: string;
+  label: string;
+  links: { name: string; url: string }[];
+}
+
+const { typ, label, links } = Astro.props;
+---
+<div class="aufnahme">
+  <div class="aufnahme-header">
+    <span class="aufnahme-typ">{typ}</span>
+    <span class="aufnahme-label">{label}</span>
+  </div>
+  <div class="aufnahme-links">
+    {links.map((link, i) => (
+      <>
+        <a href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>
+        {i < links.length - 1 && <span class="aufnahme-sep"> | </span>}
+      </>
+    ))}
+  </div>
+</div>

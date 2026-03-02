@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="42 28 55 55" fill="none">
+  <g transform="scale(-1,1) translate(-128,0) rotate(-45 64 64)">
+    <!-- Blade -->
+    <path d="M64 8 L74 60 L54 60 Z" fill="#808080"/>
+    <path d="M64 8 L64 60 L54 60 Z" fill="#999"/>
+    <line x1="64" y1="14" x2="64" y2="58" stroke="#6a6a6a" stroke-width="0.5"/>
+
+    <!-- Blood drops — staggered along blade edge -->
+    <!-- Large drop — upper blade -->
+    <path d="M67 22 L70.5 29 A4 4 0 1 1 63.5 29 Z" fill="#D72638" opacity="0.9" transform="rotate(45 67 22)"/>
+    <!-- Small drop — mid-upper, offset inward -->
+    <path d="M64 34 L66.2 38 A2.2 2.2 0 1 1 61.8 38 Z" fill="#D72638" opacity="0.75" transform="rotate(45 64 34)"/>
+    <!-- Medium drop — mid-lower blade -->
+    <path d="M70 42 L72.5 47 A3 3 0 1 1 67.5 47 Z" fill="#D72638" opacity="0.85" transform="rotate(45 70 42)"/>
+
+    <!-- Guard -->
+    <rect x="44" y="58" width="40" height="7" rx="2" fill="#3a3a3a"/>
+    <rect x="44" y="58" width="40" height="3.5" rx="1" fill="#484848"/>
+
+    <!-- Grip -->
+    <rect x="57" y="65" width="14" height="28" rx="2.5" fill="#333"/>
+    <line x1="57" y1="72" x2="71" y2="72" stroke="#444" stroke-width="1.5"/>
+    <line x1="57" y1="78" x2="71" y2="78" stroke="#444" stroke-width="1.5"/>
+    <line x1="57" y1="84" x2="71" y2="84" stroke="#444" stroke-width="1.5"/>
+    <rect x="60" y="65" width="8" height="28" rx="1" fill="#2a2a2a" opacity="0.4"/>
+
+    <!-- Pommel -->
+    <ellipse cx="64" cy="97" rx="8" ry="5" fill="#3a3a3a"/>
+    <ellipse cx="64" cy="97" rx="5" ry="3" fill="#2e2e2e"/>
+    <ellipse cx="64" cy="96" rx="3" ry="1.5" fill="#4a4a4a" opacity="0.5"/>
+  </g>
+</svg>

@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostMeta from '../components/PostMeta.astro';
+import { getPublishedPosts, getTagCounts } from '../utils/posts';
+import { estimateReadingTime } from '../utils/readingTime';
+import { getPostSlug } from '../utils/getPostSlug';
+
+const tagCounts = await getTagCounts();
+const sortedTags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+
+const posts = await getPublishedPosts();
+
+type GroupedPosts = Map<number, Map<string, typeof posts>>;
+const grouped: GroupedPosts = new Map();
+
+for (const post of posts) {
+  const year = post.data.date.getFullYear();
+  const month = post.data.date.toLocaleDateString('de-DE', { month: 'long' });
+  if (!grouped.has(year)) grouped.set(year, new Map());
+  const yearMap = grouped.get(year)!;
+  if (!yearMap.has(month)) yearMap.set(month, []);
+  yearMap.get(month)!.push(post);
+}
+
+const totalPosts = posts.length;
+---
+<BaseLayout title="Archiv" description="Alle Beiträge im Archiv — chronologisch und nach Tags sortiert.">
+  <div class="browse-page">
+    <header class="browse-hero">
+      <h1 class="browse-title">Archiv</h1>
+      <p class="browse-subtitle">{totalPosts} Beiträge</p>
+    </header>
+
+    <section class="browse-section">
+      <div class="browse-section-label">Tags</div>
+      <ul class="browse-tags">
+        {sortedTags.map(([tag, count]) => (
+          <li>
+            <a href={`/tags/${tag.toLowerCase()}/`}>
+              {tag}<span class="browse-tag-count">{count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="browse-section">
+      <div class="browse-section-label">Chronologisch</div>
+      {[...grouped.entries()].map(([year, months]) => (
+        <div class="browse-year">
+          <h2 class="browse-year-header" id={String(year)}>
+            <a href={`#${year}`}>{year}</a>
+            <span class="browse-count">{[...months.values()].reduce((acc, p) => acc + p.length, 0)}</span>
+          </h2>
+          {[...months.entries()].map(([month, monthPosts]) => (
+            <div class="browse-month">
+              <div class="browse-month-label">{month}</div>
+              <div class="browse-month-posts">
+                {monthPosts.map((post) => {
+                  const slug = getPostSlug(post);
+                  return (
+                    <a class="browse-entry" href={`/posts/${slug}/`}>
+                      <span class="browse-entry-date">
+                        {`${String(post.data.date.getDate()).padStart(2, '0')}.${String(post.data.date.getMonth() + 1).padStart(2, '0')}.`}
+                      </span>
+                      <span class="browse-entry-body">
+                        <span class="browse-entry-title">
+                          {post.data.title}{post.data.subtitle && <span class="browse-entry-subtitle"> {post.data.subtitle}</span>}
+                        </span>
+                        {post.data.summary && (
+                          <span class="browse-entry-summary">{post.data.summary}</span>
+                        )}
+                      </span>
+                      {post.body && (
+                        <span class="browse-entry-time">{estimateReadingTime(post.body)} Min.</span>
+                      )}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+interface Props {
+  items?: { label: string; href: string }[];
+}
+
+const { items = [] } = Astro.props;
+---
+<div class="breadcrumbs">
+  <a href="/">Startseite</a>
+  {items.map((item) => (
+    <Fragment>
+      <span>&nbsp;»&nbsp;</span>
+      <a href={item.href}>{item.label}</a>
+    </Fragment>
+  ))}
+</div>

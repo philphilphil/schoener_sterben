@@ -1,0 +1,75 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  date: Date;
+  tags?: string[];
+  summary?: string;
+  readingTime?: number;
+  draft?: boolean;
+  hideMeta?: boolean;
+  prevPost?: { title: string; href: string } | null;
+  nextPost?: { title: string; href: string } | null;
+}
+
+const { title, subtitle, date, tags = [], summary, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('de-DE', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+<BaseLayout title={title} description={summary}>
+  <article class="post-single">
+    <div class="nl-post-hero">
+      {!hideMeta && (
+        <div class="nl-post-meta">
+          <span class="nl-post-date">{formattedDate}</span>
+          {readingTime !== undefined && (
+            <span class="nl-post-reading-time">{readingTime} Min. Lesezeit</span>
+          )}
+          {tags.map((tag) => (
+            <a href={`/tags/${tag.toLowerCase()}/`} class="nl-tag">{tag}</a>
+          ))}
+        </div>
+      )}
+      <h1 class="nl-post-title">{title}</h1>
+      {subtitle && <p class="nl-post-subtitle">{subtitle}</p>}
+    </div>
+
+    <div class="post-content" data-pagefind-body>
+      <slot />
+    </div>
+
+    <footer class="post-footer">
+      {tags.length > 0 && (
+        <ul class="post-tags">
+          {tags.map((tag) => (
+            <li><a href={`/tags/${tag.toLowerCase()}/`}>{tag}</a></li>
+          ))}
+        </ul>
+      )}
+      {(prevPost || nextPost) && (
+        <nav class="paginav">
+          {prevPost && (
+            <a class="prev" href={prevPost.href}>
+              <span class="title">&laquo; Vorherige Seite</span>
+              <br />
+              <span>{prevPost.title}</span>
+            </a>
+          )}
+          {nextPost && (
+            <a class="next" href={nextPost.href}>
+              <span class="title">Nächste Seite &raquo;</span>
+              <br />
+              <span>{nextPost.title}</span>
+            </a>
+          )}
+        </nav>
+      )}
+    </footer>
+  </article>
+</BaseLayout>

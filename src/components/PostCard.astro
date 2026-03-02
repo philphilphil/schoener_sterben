@@ -1,0 +1,33 @@
+---
+import PostMeta from './PostMeta.astro';
+import DraftIcon from './DraftIcon.astro';
+
+interface Props {
+  title: string;
+  href: string;
+  summary?: string;
+  date: Date;
+  readingTime?: number;
+  draft?: boolean;
+  class?: string;
+}
+
+const { title, href, summary, date, readingTime, draft = false, class: className = 'post-entry' } = Astro.props;
+---
+<article class={className}>
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">
+      {title}
+      {draft && <DraftIcon height={20} />}
+    </h2>
+  </header>
+  {summary && (
+    <div class="entry-content">
+      <p>{summary}</p>
+    </div>
+  )}
+  <footer class="entry-footer">
+    <PostMeta date={date} readingTime={readingTime} />
+  </footer>
+  <a class="entry-link" aria-label={`post link to ${title}`} href={href}></a>
+</article>

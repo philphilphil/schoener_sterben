@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SingerBackground from '../components/SingerBackground.astro';
+import { getPublishedPosts } from '../utils/posts';
+import { estimateReadingTime } from '../utils/readingTime';
+import { getPostSlug } from '../utils/getPostSlug';
+
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="" description="Oper für alle!">
+  <div>
+    <section class="nl-hero">
+      <SingerBackground />
+      <h1 class="nl-hero-title">
+        <span class="line"><span>Schöner</span></span>
+        <span class="line"><span>Sterben</span></span>
+      </h1>
+      <div class="nl-hero-rule"></div>
+      <p class="nl-hero-subtitle">Oper für alle.</p>
+      <span class="nl-scroll-hint">Beiträge</span>
+    </section>
+
+    <section id="beitraege" class="nl-post-list-section">
+      <div class="nl-section-label">Neueste Beiträge</div>
+      {posts.map((post) => {
+        const slug = getPostSlug(post);
+        const readingTime = post.body ? estimateReadingTime(post.body) : undefined;
+        const dateStr = post.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        return (
+          <a href={`/posts/${slug}/`} class="nl-post-card">
+            <div class="nl-post-card-date">
+              <div>{dateStr}</div>
+              {readingTime && <div>{readingTime} Min.</div>}
+            </div>
+            <div class="nl-post-card-content">
+              <div class="nl-post-card-title">{post.data.title}{post.data.subtitle && <span class="nl-post-card-subtitle"> {post.data.subtitle}</span>}</div>
+              {post.data.summary && (
+                <div class="nl-post-card-summary">{post.data.summary}</div>
+              )}
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="nl-post-card-tags">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="nl-tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+              <span class="nl-post-card-arrow">↗</span>
+            </div>
+          </a>
+        );
+      })}
+    </section>
+  </div>
+
+<script>
+  const header = document.querySelector('.nl-header');
+  const heroTitle = document.querySelector('.nl-hero-title');
+
+  if (header && heroTitle) {
+    header.classList.add('nl-header--hero-visible');
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        header.classList.toggle('nl-header--hero-visible', entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(heroTitle);
+  }
+</script>
+</BaseLayout>
