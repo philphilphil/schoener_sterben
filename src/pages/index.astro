@@ -1,71 +1,93 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SingerBackground from '../components/SingerBackground.astro';
 import { getPublishedPosts } from '../utils/posts';
 import { estimateReadingTime } from '../utils/readingTime';
 import { getPostSlug } from '../utils/getPostSlug';
 
 const posts = await getPublishedPosts();
+const featuredPost = posts[0];
+const sidePosts = posts.slice(1, 3);
+const remainingPosts = posts.slice(3);
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+}
 ---
 <BaseLayout title="" description="Oper für alle!">
-  <div>
-    <section class="nl-hero">
-      <SingerBackground />
-      <h1 class="nl-hero-title">
-        <span class="line"><span>Schöner</span></span>
-        <span class="line"><span>Sterben</span></span>
-      </h1>
-      <div class="nl-hero-rule"></div>
-      <p class="nl-hero-subtitle">Oper für alle.</p>
-      <span class="nl-scroll-hint">Beiträge</span>
-    </section>
+  <main>
+    <div class="container">
 
-    <section id="beitraege" class="nl-post-list-section">
-      <div class="nl-section-label">Neueste Beiträge</div>
-      {posts.map((post) => {
-        const slug = getPostSlug(post);
-        const readingTime = post.body ? estimateReadingTime(post.body) : undefined;
-        const dateStr = post.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        return (
-          <a href={`/posts/${slug}/`} class="nl-post-card">
-            <div class="nl-post-card-date">
-              <div>{dateStr}</div>
-              {readingTime && <div>{readingTime} Min.</div>}
-            </div>
-            <div class="nl-post-card-content">
-              <div class="nl-post-card-title">{post.data.title}{post.data.subtitle && <span class="nl-post-card-subtitle"> {post.data.subtitle}</span>}</div>
+      <section class="featured-grid">
+        <!-- Large featured post -->
+        <article class="featured-main">
+          {featuredPost.data.image ? (
+            <img src={featuredPost.data.image} alt="" class="featured-image">
+          ) : (
+            <div class="image-placeholder">Bild</div>
+          )}
+          {featuredPost.data.tags?.[0] && (
+            <a href={`/tags/${featuredPost.data.tags[0]}/`} class="tag">{featuredPost.data.tags[0]}</a>
+          )}
+          <h2>
+            <a href={`/posts/${getPostSlug(featuredPost)}/`}>
+              {featuredPost.data.title}
+              {featuredPost.data.subtitle && <span class="featured-subtitle"> {featuredPost.data.subtitle}</span>}
+            </a>
+          </h2>
+          {featuredPost.data.summary && (
+            <p class="excerpt">{featuredPost.data.summary}</p>
+          )}
+          <span class="date">{formatDate(featuredPost.data.date)}</span>
+        </article>
+
+        <!-- Side posts -->
+        <div class="featured-side">
+          {sidePosts.map((post) => (
+            <article class="side-post">
+              {post.data.image ? (
+                <img src={post.data.image} alt="" class="side-image">
+              ) : (
+                <div class="image-placeholder">Bild</div>
+              )}
+              {post.data.tags?.[0] && (
+                <a href={`/tags/${post.data.tags[0]}/`} class="tag">{post.data.tags[0]}</a>
+              )}
+              <h3>
+                <a href={`/posts/${getPostSlug(post)}/`}>
+                  {post.data.title}
+                  {post.data.subtitle && <span class="side-subtitle"> {post.data.subtitle}</span>}
+                </a>
+              </h3>
               {post.data.summary && (
-                <div class="nl-post-card-summary">{post.data.summary}</div>
+                <p class="excerpt">{post.data.summary}</p>
               )}
-              {post.data.tags && post.data.tags.length > 0 && (
-                <div class="nl-post-card-tags">
-                  {post.data.tags.map((tag: string) => (
-                    <span class="nl-tag">{tag}</span>
-                  ))}
-                </div>
-              )}
-              <span class="nl-post-card-arrow">↗</span>
-            </div>
-          </a>
-        );
-      })}
-    </section>
-  </div>
+              <span class="date">{formatDate(post.data.date)}</span>
+            </article>
+          ))}
+        </div>
+      </section>
 
-<script>
-  const header = document.querySelector('.nl-header');
-  const heroTitle = document.querySelector('.nl-hero-title');
+      {remainingPosts.length > 0 && (
+        <section class="more-posts">
+          <hr class="section-divider">
+          <h3 class="section-title">Weitere Beiträge</h3>
+          <div class="more-posts-list">
+            {remainingPosts.map((post) => {
+              const readingTime = post.body ? estimateReadingTime(post.body) : undefined;
+              return (
+                <a href={`/posts/${getPostSlug(post)}/`} class="more-post-item">
+                  <span class="more-post-title">{post.data.title}{post.data.subtitle && ` ${post.data.subtitle}`}</span>
+                  <span class="more-post-meta">
+                    {formatDate(post.data.date)}
+                    {readingTime && ` · ${readingTime} Min.`}
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )}
 
-  if (header && heroTitle) {
-    header.classList.add('nl-header--hero-visible');
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        header.classList.toggle('nl-header--hero-visible', entry.isIntersecting);
-      },
-      { threshold: 0 }
-    );
-    observer.observe(heroTitle);
-  }
-</script>
+    </div>
+  </main>
 </BaseLayout>
