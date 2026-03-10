@@ -7,6 +7,7 @@ interface Props {
   date: Date;
   tags?: string[];
   summary?: string;
+  image?: string;
   readingTime?: number;
   draft?: boolean;
   hideMeta?: boolean;
@@ -14,7 +15,7 @@ interface Props {
   nextPost?: { title: string; href: string } | null;
 }
 
-const { title, subtitle, date, tags = [], summary, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
+const { title, subtitle, date, tags = [], summary, image, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
 
 const formattedDate = date.toLocaleDateString('de-DE', {
   year: 'numeric',
@@ -23,22 +24,27 @@ const formattedDate = date.toLocaleDateString('de-DE', {
 });
 ---
 <BaseLayout title={title} description={summary}>
-  <article class="post-single">
-    <div class="nl-post-hero">
-      {!hideMeta && (
-        <div class="nl-post-meta">
-          <span class="nl-post-date">{formattedDate}</span>
-          {readingTime !== undefined && (
-            <span class="nl-post-reading-time">{readingTime} Min. Lesezeit</span>
-          )}
-          {tags.map((tag) => (
-            <a href={`/tags/${tag.toLowerCase()}/`} class="nl-tag">{tag}</a>
-          ))}
-        </div>
-      )}
-      <h1 class="nl-post-title">{title}</h1>
-      {subtitle && <p class="nl-post-subtitle">{subtitle}</p>}
-    </div>
+  <main class="article-wrapper">
+    <a href="/" class="back-link">&larr; Zurück</a>
+
+    {!hideMeta && (
+      <div class="article-meta">
+        {tags.map((tag) => (
+          <a href={`/tags/${tag.toLowerCase()}/`} class="tag">{tag}</a>
+        ))}
+        <span class="meta-date">{formattedDate}</span>
+        {readingTime !== undefined && (
+          <span class="meta-reading-time">&middot; {readingTime} Min. Lesezeit</span>
+        )}
+      </div>
+    )}
+
+    <h1 class="article-title">
+      {title}
+      {subtitle && <span class="article-subtitle"> {subtitle}</span>}
+    </h1>
+
+    {image && <img src={image} alt="" class="article-image">}
 
     <div class="post-content" data-pagefind-body>
       <slot />
@@ -56,14 +62,14 @@ const formattedDate = date.toLocaleDateString('de-DE', {
         <nav class="paginav">
           {prevPost && (
             <a class="prev" href={prevPost.href}>
-              <span class="title">&laquo; Vorherige Seite</span>
+              <span class="title">&laquo; Vorheriger Beitrag</span>
               <br />
               <span>{prevPost.title}</span>
             </a>
           )}
           {nextPost && (
             <a class="next" href={nextPost.href}>
-              <span class="title">Nächste Seite &raquo;</span>
+              <span class="title">Nächster Beitrag &raquo;</span>
               <br />
               <span>{nextPost.title}</span>
             </a>
@@ -71,5 +77,5 @@ const formattedDate = date.toLocaleDateString('de-DE', {
         </nav>
       )}
     </footer>
-  </article>
+  </main>
 </BaseLayout>

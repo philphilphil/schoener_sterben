@@ -37,6 +37,7 @@ const { Content } = await render(post);
   date={post.data.date}
   tags={post.data.tags}
   summary={post.data.summary}
+  image={post.data.image}
   readingTime={post.body ? estimateReadingTime(post.body) : undefined}
   draft={post.data.draft}
   hideMeta={post.data.hideMeta}
