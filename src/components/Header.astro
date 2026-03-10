@@ -6,38 +6,31 @@ interface Props {
 const { currentPath = '' } = Astro.props;
 
 const menuItems = [
-  { name: 'Beiträge', url: '/#beitraege' },
+  { name: 'Blog', url: '/' },
+  { name: 'Archiv', url: '/browse/' },
   { name: 'Opern-FAQ', url: '/faq/' },
   { name: 'Über', url: '/about/' },
-  { name: 'Archiv', url: '/browse/' },
 ];
 ---
-<header class="nl-header">
-  <div class="nl-header-top">
-    <div class="nl-logo"><a href="/">Schöner Sterben</a></div>
-    <button class="nl-theme-toggle" id="nl-theme-toggle" aria-label="Farbmodus wechseln">
-      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="masthead">Schöner Sterben</a>
+    <div class="subtitle">Ein Opernblog</div>
   </div>
-  <nav class="nl-nav" id="nl-menu">
-    {menuItems.map((item) => (
-      <a href={item.url} class={(item.url.startsWith('/#') ? currentPath === '/' : currentPath.startsWith(item.url)) ? 'active' : ''}>
-        {item.name}
-      </a>
-    ))}
+  <nav class="site-nav">
+    <div class="container">
+      <ul>
+        {menuItems.map((item) => (
+          <li>
+            <a
+              href={item.url}
+              class={currentPath === item.url || (item.url !== '/' && currentPath.startsWith(item.url)) ? 'active' : ''}
+            >
+              {item.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </nav>
 </header>
-
-<script>
-  document.getElementById('nl-theme-toggle')?.addEventListener('click', () => {
-    const html = document.querySelector('html')!;
-    if (html.dataset.theme === 'dark') {
-      html.dataset.theme = 'light';
-      localStorage.setItem('pref-theme', 'light');
-    } else {
-      html.dataset.theme = 'dark';
-      localStorage.setItem('pref-theme', 'dark');
-    }
-  });
-</script>

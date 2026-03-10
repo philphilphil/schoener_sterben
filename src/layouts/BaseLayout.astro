@@ -6,15 +6,14 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
-  bodyClass?: string;
 }
 
-const { title, description = 'Oper für alle!', bodyClass = '' } = Astro.props;
+const { title, description = 'Oper für alle!' } = Astro.props;
 const fullTitle = title ? `${title} | Schöner Sterben` : 'Schöner Sterben';
 const currentPath = Astro.url.pathname;
 ---
 <!DOCTYPE html>
-<html lang="de" dir="auto" data-theme="dark">
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,27 +30,15 @@ const currentPath = Astro.url.pathname;
   <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="canonical" href={Astro.url.href}>
-  <meta name="theme-color" content="#0A0A0A">
+  <meta name="theme-color" content="#fafafa">
   <link rel="preload" href="/fonts/Draculitos.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/fonts/iAWriterQuattroV.woff2" as="font" type="font/woff2" crossorigin>
-  <noscript>
-    <style is:inline>
-      .nl-theme-toggle {
-        display: none;
-      }
-    </style>
-  </noscript>
-  <script is:inline>
-    if (localStorage.getItem("pref-theme") === "light") {
-      document.querySelector("html").dataset.theme = 'light';
-    }
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;1,400&family=Libre+Baskerville:wght@700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class={bodyClass} id="top">
+<body id="top">
   <Header currentPath={currentPath} />
-  <main class="main">
-    <slot />
-  </main>
+  <slot />
   <Footer />
 </body>
 </html>
