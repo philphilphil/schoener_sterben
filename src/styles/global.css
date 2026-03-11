@@ -151,7 +151,18 @@ a:hover {
   line-height: 1.05;
   color: var(--text);
   text-decoration: none;
-  display: block;
+  display: inline-block;
+  position: relative;
+}
+
+.masthead-singer {
+  position: absolute;
+  right: -80px;
+  bottom: 5px;
+  height: 90px;
+  width: auto;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .masthead:hover {
