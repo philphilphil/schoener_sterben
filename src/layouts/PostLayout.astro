@@ -8,6 +8,7 @@ interface Props {
   tags?: string[];
   summary?: string;
   image?: string;
+  imageCaption?: string;
   readingTime?: number;
   draft?: boolean;
   hideMeta?: boolean;
@@ -15,7 +16,7 @@ interface Props {
   nextPost?: { title: string; href: string } | null;
 }
 
-const { title, subtitle, date, tags = [], summary, image, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
+const { title, subtitle, date, tags = [], summary, image, imageCaption, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
 
 const formattedDate = date.toLocaleDateString('de-DE', {
   year: 'numeric',
@@ -44,7 +45,12 @@ const formattedDate = date.toLocaleDateString('de-DE', {
       {subtitle && <span class="article-subtitle"> {subtitle}</span>}
     </h1>
 
-    {image && <img src={image} alt="" class="article-image">}
+    {image && (
+      <figure class="article-figure">
+        <img src={image} alt="" class="article-image">
+        {imageCaption && <figcaption class="article-image-caption">{imageCaption}</figcaption>}
+      </figure>
+    )}
 
     <div class="post-content" data-pagefind-body>
       <slot />

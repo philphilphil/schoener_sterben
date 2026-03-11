@@ -29,6 +29,7 @@ const posts = defineCollection({
     slug: z.string().optional(),
     summary: z.string().optional().default(''),
     image: z.string().optional(),
+    imageCaption: z.string().optional(),
     hideMeta: z.boolean().optional().default(false),
     cssclasses: z.array(z.string()).optional(),
   }),

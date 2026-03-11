@@ -21,7 +21,9 @@ function formatDate(date: Date): string {
         <!-- Large featured post -->
         <article class="featured-main">
           {featuredPost.data.image ? (
-            <img src={featuredPost.data.image} alt="" class="featured-image">
+            <a href={`/posts/${getPostSlug(featuredPost)}/`}>
+              <img src={featuredPost.data.image} alt="" class="featured-image">
+            </a>
           ) : (
             <div class="image-placeholder">Bild</div>
           )}
@@ -45,7 +47,9 @@ function formatDate(date: Date): string {
           {sidePosts.map((post) => (
             <article class="side-post">
               {post.data.image ? (
-                <img src={post.data.image} alt="" class="side-image">
+                <a href={`/posts/${getPostSlug(post)}/`}>
+                  <img src={post.data.image} alt="" class="side-image">
+                </a>
               ) : (
                 <div class="image-placeholder">Bild</div>
               )}
