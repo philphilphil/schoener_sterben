@@ -1,4 +1,6 @@
 ---
+import { formatDate } from '../utils/formatDate';
+
 interface Props {
   date: Date;
   readingTime?: number;
@@ -7,11 +9,7 @@ interface Props {
 
 const { date, readingTime, author = 'Phil Baum' } = Astro.props;
 
-const formattedDate = date.toLocaleDateString('de-DE', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
+const formattedDate = formatDate(date);
 ---
 <span title={date.toISOString()}>{formattedDate}</span>
 {readingTime !== undefined && (

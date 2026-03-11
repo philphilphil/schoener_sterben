@@ -442,242 +442,13 @@ a:hover {
   flex-shrink: 0;
 }
 
-.aktuelles-section {
-  display: grid;
-  grid-template-columns: 1fr 0.68fr;
-  gap: 32px;
-  margin-bottom: 80px;
-}
-
-.aktuelles-spacer {
-  /* left column intentionally empty for asymmetry */
-}
-
-.aktuelles-content h4 {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--text);
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--text);
-  display: inline-block;
-}
-
-.aktuelles-list {
-  list-style: none;
-}
-
-.aktuelles-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--divider);
-}
-
-.aktuelles-list li:first-child {
-  padding-top: 0;
-}
-
-.aktuelles-title {
-  font-family: var(--font-headline);
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--text);
-  flex: 1;
-  margin-right: 24px;
-}
-
-.aktuelles-date {
-  font-family: var(--font-ui);
-  font-weight: 400;
-  font-size: 12px;
-  color: var(--muted);
-  white-space: nowrap;
-  letter-spacing: 0.3px;
-}
-
-/* ===== 12. Homepage Post List (nl-* classes) ===== */
-.nl-post-list-section {
-  max-width: var(--container-max);
-  margin: 0 auto;
-  padding: 0 32px 80px;
-  scroll-margin-top: 5rem;
-}
-
-.nl-section-label {
-  font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  color: var(--text);
-  margin-bottom: 8px;
-  padding-top: 24px;
-  padding-bottom: 10px;
-  border-top: none;
-  border-bottom: 2px solid var(--text);
-  display: inline-block;
-}
-
-.nl-post-card {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 2rem;
-  padding: 2rem 0;
-  border-bottom: 1px solid var(--divider);
-  text-decoration: none;
-  color: var(--text);
-  transition: color 0.2s ease;
-  position: relative;
-}
-
-.nl-post-card:hover {
-  color: var(--text);
-  text-decoration: none;
-}
-
-.nl-post-card:hover .nl-post-card-title {
-  color: var(--accent);
-}
-
-.nl-post-card:hover .nl-post-card-arrow {
-  transform: translate(4px, -4px);
-  opacity: 1;
-}
-
-.nl-post-card-date {
-  font-family: var(--font-ui);
-  font-size: 13px;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  padding-top: 0.3rem;
-}
-
-.nl-post-card-content {
-  position: relative;
-}
-
-.nl-post-card-title {
-  font-family: var(--font-headline);
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-  transition: color 0.2s ease;
-}
-
-.nl-post-card-subtitle {
-  color: var(--accent);
-}
-
-.nl-post-card-summary {
-  color: var(--muted);
-  font-size: 1rem;
-  font-weight: 400;
-  margin-bottom: 0.8rem;
-  line-height: 1.6;
-}
-
-.nl-post-card-tags {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.nl-tag {
-  font-family: var(--font-ui);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  padding: 2px 8px 1px;
-  text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.nl-tag:hover {
-  background: var(--accent);
-  color: var(--bg);
-  text-decoration: none;
-}
-
-.nl-post-card-arrow {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 1.2rem;
-  opacity: 0;
-  transition: all 0.2s ease;
-  color: var(--accent);
-}
-
-/* ===== 13. Article Layout ===== */
+/* ===== 12. Article Layout ===== */
 .post-single {
   max-width: 100%;
   padding: 0;
 }
 
-.nl-post-hero {
-  padding: 48px 32px 32px;
-  position: relative;
-  max-width: 1000px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.nl-post-meta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.nl-post-date {
-  font-family: var(--font-ui);
-  font-size: 13px;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.nl-post-reading-time {
-  font-family: var(--font-ui);
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-.nl-post-title {
-  font-family: var(--font-headline);
-  font-size: clamp(2rem, 5vw, 2.8rem);
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  position: relative;
-  z-index: 1;
-}
-
-.nl-post-subtitle {
-  font-family: var(--font-headline);
-  font-size: clamp(2rem, 5vw, 2.8rem);
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1.15;
-  letter-spacing: -0.01em;
-  margin-top: 0;
-  position: relative;
-  z-index: 1;
-}
-
-/* Article wrapper (from prototype) */
+/* Article wrapper */
 .article-wrapper {
   max-width: var(--article-max);
   margin: 0 auto;
@@ -733,7 +504,7 @@ a:hover {
 
 .article-image-caption {
   font-size: 0.78rem;
-  color: var(--text-muted, #888);
+  color: var(--muted);
   text-align: right;
   margin-top: 6px;
   font-style: italic;
@@ -803,13 +574,6 @@ a:hover {
 .post-content dd~dd,
 .post-content dt~dt { margin-top: 10px; }
 
-/* Article body (prototype class) */
-.article-body p {
-  margin-bottom: 22px;
-  font-size: 19px;
-  line-height: 1.8;
-}
-
 /* Post content links */
 .post-content a {
   color: var(--accent);
@@ -857,7 +621,7 @@ a:hover {
   margin: auto 0;
   padding: 10px;
   color: rgb(213, 213, 214);
-  background: #2a2420 !important;
+  background: #2a2420;
   border-radius: var(--radius);
   overflow-x: auto;
   word-break: break-all;
@@ -865,7 +629,7 @@ a:hover {
 
 .post-content .highlight:not(table) {
   margin: 10px auto;
-  background: #2a2420 !important;
+  background: #2a2420;
   border-radius: var(--radius);
   direction: ltr;
 }
@@ -955,8 +719,7 @@ a:hover {
 }
 
 /* ===== 16. Blockquotes ===== */
-.post-content blockquote,
-.article-body blockquote {
+.post-content blockquote {
   border-left: 2px solid var(--divider);
   padding-left: 24px;
   margin: 36px 0;
@@ -1038,53 +801,6 @@ a:hover {
   opacity: 0.85;
 }
 
-/* Prototype-style handlung-details (backward compat) */
-.handlung-details {
-  margin: 36px 0;
-  border: 1px solid var(--divider);
-  padding: 0;
-}
-
-.handlung-details summary {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 16px 24px;
-  cursor: pointer;
-  user-select: none;
-  background: rgba(0, 0, 0, 0.02);
-  border-bottom: 1px solid var(--divider);
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.handlung-details summary::before {
-  content: '+';
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1;
-  transition: transform 0.2s ease;
-}
-
-.handlung-details[open] summary::before {
-  content: '\2212';
-}
-
-.handlung-details[open] summary {
-  border-bottom: 1px solid var(--divider);
-}
-
-.handlung-details .handlung-body {
-  padding: 24px;
-  font-size: 17px;
-  line-height: 1.75;
-  color: var(--muted);
-}
-
 /* ===== 18. Recordings / Aufnahmen ===== */
 .aufnahmen {
   background: transparent;
@@ -1156,70 +872,6 @@ a:hover {
 .aufnahme-sep {
   color: var(--muted);
   font-size: 0.85rem;
-}
-
-/* Prototype-style recordings section */
-.recordings-section {
-  margin: 44px 0 36px;
-  border-top: 1px solid var(--divider);
-  padding-top: 28px;
-}
-
-.recordings-section h3 {
-  font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  margin-bottom: 18px;
-}
-
-.recordings-list {
-  list-style: none;
-}
-
-.recordings-list li {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--divider);
-  font-size: 16px;
-}
-
-.recordings-list li:last-child {
-  border-bottom: none;
-}
-
-.recording-type {
-  font-family: var(--font-ui);
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  border: 1px solid var(--text);
-  padding: 2px 8px 1px;
-  white-space: nowrap;
-}
-
-.recording-label {
-  color: var(--muted);
-}
-
-/* Premiere info */
-.premiere-info {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid var(--divider);
-  font-family: var(--font-ui);
-  font-weight: 400;
-  font-size: 13px;
-  color: var(--muted);
-  letter-spacing: 0.5px;
-}
-
-.premiere-info strong {
-  font-weight: 600;
 }
 
 /* ===== 19. Spoiler ===== */
@@ -1380,41 +1032,20 @@ hr {
 
 .post-footer > * { margin-bottom: 16px; }
 
-.post-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  list-style: none;
-}
-
-.post-tags li { display: inline-block; }
-
-.post-tags a {
-  display: block;
-  font-family: var(--font-ui);
-  padding: 4px 14px;
-  color: var(--accent);
-  font-size: 11px;
-  line-height: 24px;
-  border: 1px solid var(--accent);
-  background: transparent;
-  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-}
-
-.post-tags a:hover {
-  background: var(--accent);
-  color: var(--bg);
-  text-decoration: none;
-}
-
 /* ===== 26. Browse / Archive Page ===== */
 .browse-page {
   max-width: 720px;
   margin: 0 auto;
   padding: 0 32px 80px;
+}
+
+.about-page {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.about-page .post-content {
+  padding-bottom: 0;
 }
 
 .browse-hero {
@@ -1728,29 +1359,9 @@ hr {
   .faq-page {
     padding: 0 20px 60px;
   }
-  .faq-hero {
-    padding: 2.5rem 0 2rem;
-  }
 }
 
-/* ===== 29. List Layout ===== */
-.main {
-  max-width: 100%;
-  padding: 0;
-  flex: 1;
-}
-
-body.list .main {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 32px 4rem;
-}
-
-body.list .main:has(.browse-hero) {
-  padding-top: 0;
-}
-
-/* ===== 30. Post Meta ===== */
+/* ===== 29. Post Meta ===== */
 .post-meta {
   font-family: var(--font-ui);
   font-size: 13px;
@@ -1871,26 +1482,12 @@ body.list .main:has(.browse-hero) {
   bottom: 0;
 }
 
-.entry-hint { color: var(--muted); }
-
 .entry-hint-parent {
   display: flex;
   justify-content: space-between;
 }
 
-/* ===== 34. Page Header ===== */
-.page-header {
-  margin: 0 auto var(--content-gap) auto;
-}
-
-.page-header h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: normal;
-  letter-spacing: 0.02em;
-}
-
-/* ===== 35. Post Header (about, etc.) ===== */
+/* ===== 34. Post Header (about, etc.) ===== */
 .post-header {
   max-width: var(--article-max);
   margin: 4rem auto 0;
@@ -1905,12 +1502,6 @@ body.list .main:has(.browse-hero) {
 }
 
 /* ===== 36. 404 ===== */
-body.list:has(.not-found) .main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .not-found {
   display: flex;
   flex-direction: column;
@@ -2071,14 +1662,6 @@ h1 > a > svg { display: inline; }
     height: 200px;
   }
 
-  .aktuelles-section {
-    grid-template-columns: 1fr;
-  }
-
-  .aktuelles-spacer {
-    display: none;
-  }
-
   .article-wrapper h1 {
     font-size: 32px;
   }
@@ -2086,30 +1669,6 @@ h1 > a > svg { display: inline; }
   .pullquote {
     font-size: 1.15rem;
     margin-left: 0;
-  }
-
-  /* Post list */
-  .nl-post-list-section {
-    padding: 0 24px 60px;
-  }
-
-  .nl-post-card {
-    grid-template-columns: 1fr;
-    gap: 0.3rem;
-  }
-
-  .nl-post-card-title {
-    font-size: 1.5rem;
-  }
-
-  /* Post page */
-  .nl-post-hero {
-    padding: 32px 24px 24px;
-  }
-
-  .nl-post-meta {
-    flex-wrap: wrap;
-    gap: 0.6rem;
   }
 
   .post-content {
@@ -2144,19 +1703,11 @@ h1 > a > svg { display: inline; }
     display: none;
   }
 
-  /* List pages */
-  body.list .main {
-    padding: 2rem 24px 4rem;
-  }
-
   /* Paginav */
   .paginav {
     flex-direction: column;
   }
 
-  .page-header h1 {
-    font-size: 1.75rem;
-  }
 }
 
 /* ===== 42. Responsive — 520px ===== */
@@ -2184,10 +1735,6 @@ h1 > a > svg { display: inline; }
 
   .article-wrapper h1 {
     font-size: 28px;
-  }
-
-  .nl-post-card-title {
-    font-size: 1.3rem;
   }
 
   .browse-hero {

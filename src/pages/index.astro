@@ -3,15 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getPublishedPosts } from '../utils/posts';
 import { estimateReadingTime } from '../utils/readingTime';
 import { getPostSlug } from '../utils/getPostSlug';
+import { formatDate } from '../utils/formatDate';
 
 const posts = await getPublishedPosts();
 const featuredPost = posts[0];
 const teaserPosts = posts.slice(1, 4);
 const remainingPosts = posts.slice(4);
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
-}
 ---
 <BaseLayout title="" description="Oper für alle!">
   <main>
