@@ -52,12 +52,12 @@ const jsonLd = {
 ---
 
 <BaseLayout title="Opern-FAQ" description="Häufige Fragen rund um die Oper — von Dresscode bis Libretto.">
-  <div class="browse-page">
-    <div class="faq-container">
+  <div class="faq-page">
+    <div class="faq-body">
       {
         faqData.map((category) => (
           <section class="faq-category">
-            <p class="faq-category-title">{category.category}</p>
+            <h2 class="faq-category-title">{category.category}</h2>
             {category.questions.map((item) => (
               <details class="faq-item">
                 <summary>{item.q}</summary>

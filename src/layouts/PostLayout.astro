@@ -26,8 +26,6 @@ const formattedDate = date.toLocaleDateString('de-DE', {
 ---
 <BaseLayout title={title} description={summary}>
   <main class="article-wrapper">
-    <a href="/" class="back-link">&larr; Zurück</a>
-
     {!hideMeta && (
       <div class="article-meta">
         {tags.map((tag) => (
@@ -42,7 +40,7 @@ const formattedDate = date.toLocaleDateString('de-DE', {
 
     <h1 class="article-title">
       {title}
-      {subtitle && <span class="article-subtitle"> {subtitle}</span>}
+      {subtitle && <><br /><span class="article-subtitle">{subtitle}</span></>}
     </h1>
 
     {image && (
@@ -57,13 +55,6 @@ const formattedDate = date.toLocaleDateString('de-DE', {
     </div>
 
     <footer class="post-footer">
-      {tags.length > 0 && (
-        <ul class="post-tags">
-          {tags.map((tag) => (
-            <li><a href={`/tags/${tag.toLowerCase()}/`}>{tag}</a></li>
-          ))}
-        </ul>
-      )}
       {(prevPost || nextPost) && (
         <nav class="paginav">
           {prevPost && (

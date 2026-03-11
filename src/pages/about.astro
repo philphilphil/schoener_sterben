@@ -6,8 +6,8 @@ const entry = await getEntry('pages', 'about');
 const { Content } = await render(entry!);
 ---
 <BaseLayout title="Über" description="Über den Opernblog Schöner Sterben.">
-  <div class="browse-page">
-    <div class="post-content">
+  <div class="browse-page" style="padding-top: 24px; padding-bottom: 24px;">
+    <div class="post-content" style="padding-bottom: 0;">
       <Content />
     </div>
   </div>
