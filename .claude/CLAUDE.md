@@ -60,3 +60,24 @@ Import path from `src/content/posts/`: `../../components/ComponentName.astro`
 
 - **Playwright**: Use the Playwright MCP for browser automation — visually inspecting pages, taking screenshots, clicking elements, and verifying rendered output. Start the dev server (`npm run dev`) before navigating to `http://localhost:4321`. **Save all screenshots to `.playwright-mcp/`** (e.g. `filename: ".playwright-mcp/my-screenshot.png"`).
 - **Astro Docs**: Use the `search_astro_docs` MCP tool to look up Astro framework documentation when unsure about APIs, components, or configuration.
+
+# Design Rules
+
+<frontend_aesthetics>
+You tend to converge toward generic outputs. Avoid "AI slop."
+
+Typography: Never use Inter, Roboto, Open Sans, Lato, Space Grotesk, 
+or system fonts. Load from Google Fonts. Use extreme weight contrasts 
+(200 vs 800+), size jumps of 3x+.
+
+Colors: No default Tailwind palette. No purple-on-white. Build palette 
+from a single brand color. Use CSS variables. Dominant color + sharp accent.
+
+Backgrounds: No solid white/gray. Layer gradients, noise textures, 
+geometric patterns, or contextual effects.
+
+Shadows: No flat shadow-md. Use layered, colored, or offset shadows.
+
+Layout: No centered-card-on-white-page. Use asymmetry, overlap, 
+grid-breaking elements, or editorial column structures.
+</frontend_aesthetics>

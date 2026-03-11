@@ -6,8 +6,8 @@ import { getPostSlug } from '../utils/getPostSlug';
 
 const posts = await getPublishedPosts();
 const featuredPost = posts[0];
-const sidePosts = posts.slice(1, 3);
-const remainingPosts = posts.slice(3);
+const teaserPosts = posts.slice(1, 4);
+const remainingPosts = posts.slice(4);
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -17,8 +17,7 @@ function formatDate(date: Date): string {
   <main>
     <div class="container">
 
-      <section class="featured-grid">
-        <!-- Large featured post -->
+      <section class="featured-hero">
         <article class="featured-main">
           {featuredPost.data.image ? (
             <a href={`/posts/${getPostSlug(featuredPost)}/`}>
@@ -41,14 +40,15 @@ function formatDate(date: Date): string {
           )}
           <span class="date">{formatDate(featuredPost.data.date)}</span>
         </article>
+      </section>
 
-        <!-- Side posts -->
-        <div class="featured-side">
-          {sidePosts.map((post) => (
-            <article class="side-post">
+      {teaserPosts.length > 0 && (
+        <section class="teaser-grid">
+          {teaserPosts.map((post) => (
+            <article class="teaser-post">
               {post.data.image ? (
                 <a href={`/posts/${getPostSlug(post)}/`}>
-                  <img src={post.data.image} alt="" class="side-image">
+                  <img src={post.data.image} alt="" class="teaser-image">
                 </a>
               ) : (
                 <div class="image-placeholder">Bild</div>
@@ -59,7 +59,7 @@ function formatDate(date: Date): string {
               <h3>
                 <a href={`/posts/${getPostSlug(post)}/`}>
                   {post.data.title}
-                  {post.data.subtitle && <span class="side-subtitle"> {post.data.subtitle}</span>}
+                  {post.data.subtitle && <span class="teaser-subtitle"> {post.data.subtitle}</span>}
                 </a>
               </h3>
               {post.data.summary && (
@@ -68,8 +68,8 @@ function formatDate(date: Date): string {
               <span class="date">{formatDate(post.data.date)}</span>
             </article>
           ))}
-        </div>
-      </section>
+        </section>
+      )}
 
       {remainingPosts.length > 0 && (
         <section class="more-posts">
