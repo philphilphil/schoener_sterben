@@ -2,12 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Datenschutz" description="Datenschutzerklärung von Schöner Sterben.">
-  <article class="post-single">
-    <header class="post-header">
-      <h1 class="post-title">Datenschutz</h1>
-      <hr class="post-header-rule" />
-    </header>
-    <div class="post-content">
+  <article class="datenschutz-page">
+    <h1>Datenschutz</h1>
+    <div class="datenschutz-content">
+
   <h2>1. Verantwortlicher</h2>
   <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
   <p>Philipp Baum<br />
@@ -73,6 +71,45 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   <h2>9. Stand</h2>
   <p>Stand dieser Datenschutzerklärung: März 2026</p>
+
     </div>
   </article>
 </BaseLayout>
+
+<style>
+  .datenschutz-page {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .datenschutz-page h1 {
+    font-family: var(--font-headline);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+
+  .datenschutz-content h2 {
+    font-family: var(--font-headline);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .datenschutz-content p {
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .datenschutz-content ul {
+    margin-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    line-height: 1.7;
+  }
+
+  .datenschutz-content li {
+    margin-bottom: 0.25rem;
+  }
+</style>
