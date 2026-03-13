@@ -904,6 +904,12 @@ a:hover {
   font-weight: 400;
 }
 
+.aufnahme-links-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-right: 0.3em;
+}
+
 .aufnahme-links a {
   color: var(--accent);
   text-decoration: underline;

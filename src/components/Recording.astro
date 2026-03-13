@@ -13,6 +13,7 @@ const { typ, label, links } = Astro.props;
     <span class="aufnahme-label">{label}</span>
   </div>
   <div class="aufnahme-links">
+    <span class="aufnahme-links-label">Links:</span>
     {links.map((link, i) => (
       <>
         <a href={link.url} target="_blank" rel="noopener noreferrer">{link.name}</a>
