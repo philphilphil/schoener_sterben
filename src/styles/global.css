@@ -62,6 +62,25 @@
   color-scheme: light;
 }
 
+/* ===== 2b. Dark Theme Overrides ===== */
+html[data-theme="dark"] {
+  --bg: #141414;
+  --text: #e8e8e8;
+  --accent: #c22940;
+  --muted: #9a9a9a;
+  --divider: #2a2a2a;
+  --placeholder-start: #2a2722;
+  --placeholder-end: #1f1d1a;
+  --selection-text: #fff;
+  --code-bg: #2a2722;
+  --code-block-text: rgb(213, 213, 214);
+  --code-block-bg: #1e1b18;
+  --placeholder-text: #6b6560;
+  --btn-text: #fff;
+  --pagefind-tag: #2a2722;
+  color-scheme: dark;
+}
+
 /* ===== 3. Reset + Base ===== */
 *,
 *::before,
