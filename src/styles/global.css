@@ -37,6 +37,13 @@
   --divider: #e0e0e0;
   --placeholder-start: #e8e4dc;
   --placeholder-end: #d4cfc4;
+  --selection-text: #fff;
+  --code-bg: #f0ece6;
+  --code-block-text: rgb(213, 213, 214);
+  --code-block-bg: #2a2420;
+  --placeholder-text: #a09a8e;
+  --btn-text: #fff;
+  --pagefind-tag: #f0ece6;
 
   /* Fonts */
   --font-display: 'Draculitos', Georgia, serif;
@@ -131,7 +138,7 @@ div.highlight, pre { position: relative; }
 
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: var(--selection-text);
 }
 
 /* ===== 4. Links ===== */
@@ -392,7 +399,7 @@ a:hover {
   font-family: var(--font-ui);
   font-weight: 400;
   font-size: 13px;
-  color: #a09a8e;
+  color: var(--placeholder-text);
   letter-spacing: 1px;
 }
 
@@ -627,7 +634,7 @@ a:hover {
   padding: 4px 6px;
   font-size: 0.78em;
   line-height: 1.5;
-  background: #f0ece6;
+  background: var(--code-bg);
   border-radius: 2px;
 }
 
@@ -635,8 +642,8 @@ a:hover {
   display: grid;
   margin: auto 0;
   padding: 10px;
-  color: rgb(213, 213, 214);
-  background: #2a2420;
+  color: var(--code-block-text);
+  background: var(--code-block-bg);
   border-radius: var(--radius);
   overflow-x: auto;
   word-break: break-all;
@@ -644,7 +651,7 @@ a:hover {
 
 .post-content .highlight:not(table) {
   margin: 10px auto;
-  background: #2a2420;
+  background: var(--code-block-bg);
   border-radius: var(--radius);
   direction: ltr;
 }
@@ -1089,7 +1096,7 @@ a:hover {
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--btn-text);
   background: var(--accent);
   border: 1px solid var(--accent);
   padding: 10px 24px 9px;
@@ -1754,7 +1761,7 @@ hr {
   --pagefind-ui-text: var(--text);
   --pagefind-ui-background: var(--bg);
   --pagefind-ui-border: var(--divider);
-  --pagefind-ui-tag: #f0ece6;
+  --pagefind-ui-tag: var(--pagefind-tag);
   --pagefind-ui-border-width: 1px;
   --pagefind-ui-border-radius: var(--radius);
   --pagefind-ui-font: var(--font-body);
