@@ -81,6 +81,10 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
+html[data-theme] body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 /* ===== 3. Reset + Base ===== */
 *,
 *::before,
@@ -1786,6 +1790,40 @@ hr {
   --pagefind-ui-font: var(--font-body);
 }
 
+/* ===== 38b. Theme Toggle ===== */
+.theme-toggle {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+  margin-left: auto;
+}
+
+.theme-toggle:hover {
+  color: var(--accent);
+}
+
+.theme-toggle svg {
+  display: block;
+}
+
+.site-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.site-nav .theme-toggle {
+  position: absolute;
+  right: 0;
+}
+
 /* ===== 39. Focus Visible ===== */
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -1893,6 +1931,16 @@ h1 > a > svg { display: inline; }
   .site-nav a {
     font-size: 11px;
     letter-spacing: 1.5px;
+  }
+
+  .site-nav .container {
+    flex-wrap: wrap;
+  }
+
+  .site-nav .theme-toggle {
+    position: static;
+    margin-left: 0;
+    margin-top: 8px;
   }
 
   .featured-main h2 {
