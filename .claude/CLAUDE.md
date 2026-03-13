@@ -43,7 +43,7 @@ Available for use in posts — must be explicitly imported with relative paths:
 - `<Spoiler title="...">` — Collapsed spoiler block
 - `<Collapse summary="..." openByDefault={false}>` — Generic collapsible
 - `<Handlung>` — Plot summary in a collapsible `<details>` block (open by default)
-- `<YouTube id="..." title="..." start={0}>` — Privacy-friendly YouTube embed (uses youtube-nocookie.com)
+- `<YouTube id="..." title="..." start={0} posterSrc="..." description="...">` — Privacy-safe YouTube embed (DSGVO/GDPR compliant). No YouTube resources loaded until user clicks the page-level consent button. All embeds on a page load/unload together via a single controller inserted before the first embed. Individual videos can be hidden via "Video ausblenden". Wraps `YouTubeConsentEmbed`. Optional `posterSrc` for a locally-hosted poster image, `description` for context text.
 - `<Recordings>` + `<Recording>` — Recommended recordings section. Container `<Recordings>` wraps `<Recording>` items. Props for `<Recording>`: `typ` (string badge, e.g. "Audio"), `label` (string), `links` (array of `{name, url}`)
 
 Import path from `src/content/posts/`: `../../components/ComponentName.astro`

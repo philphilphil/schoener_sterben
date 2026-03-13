@@ -1,0 +1,184 @@
+---
+/**
+ * YouTubeConsentEmbed — Privacy-safe YouTube embed with page-level consent.
+ *
+ * No YouTube/Google resources are loaded until the user explicitly clicks
+ * a consent button on any embed. Clicking one loads ALL embeds on the page.
+ * No cookies, localStorage, or any persistence is used — every page load
+ * starts clean. This satisfies German/EU privacy requirements (DSGVO/GDPR).
+ */
+interface Props {
+  videoId: string;
+  title?: string;
+  posterSrc?: string;
+  description?: string;
+  start?: number;
+}
+
+const {
+  videoId,
+  title = 'YouTube-Video',
+  posterSrc,
+  description,
+  start,
+} = Astro.props;
+
+const embedParams = new URLSearchParams({
+  rel: '0',
+  modestbranding: '1',
+});
+if (start) embedParams.set('start', String(start));
+
+const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?${embedParams}`;
+---
+
+<figure
+  class="yt-consent"
+  data-youtube-embed
+  data-embed-url={embedUrl}
+  data-title={title}
+>
+  <div class="yt-consent-placeholder">
+    {posterSrc && (
+      <img
+        class="yt-consent-poster"
+        src={posterSrc}
+        alt={`Vorschaubild: ${title}`}
+        loading="lazy"
+      />
+    )}
+    <div class="yt-consent-overlay">
+      <div class="yt-consent-play" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="23" stroke="currentColor" stroke-width="2"/>
+          <polygon points="19,14 19,34 35,24" fill="currentColor"/>
+        </svg>
+      </div>
+      {description && <p class="yt-consent-description">{description}</p>}
+      <p class="yt-consent-title">{title}</p>
+      <p class="yt-consent-notice">
+        Mit dem Laden werden alle YouTube-Videos dieser Seite aktiviert.
+        Dabei wird eine Verbindung zu YouTube/Google hergestellt und
+        personenbezogene Daten können in die USA übertragen werden.
+      </p>
+      <button class="yt-consent-btn" type="button">
+        YouTube-Video laden
+      </button>
+    </div>
+  </div>
+</figure>
+
+<script>
+  function initYtPageConsent() {
+    const embeds = document.querySelectorAll<HTMLElement>('[data-youtube-embed]');
+    if (embeds.length === 0) return;
+
+    // Clean up previous state
+    document.querySelectorAll('.yt-page-hide-all').forEach((el) => el.remove());
+    embeds.forEach((embed) => embed.removeAttribute('data-yt-init'));
+
+    // Store placeholder HTML for each embed
+    const placeholders = new Map<HTMLElement, string>();
+    embeds.forEach((embed) => {
+      const ph = embed.querySelector('.yt-consent-placeholder');
+      if (ph) placeholders.set(embed, ph.outerHTML);
+      embed.dataset.ytInit = '1';
+    });
+
+    const single = embeds.length === 1;
+    const hideAllLabel = single
+      ? 'YouTube-Video ausblenden'
+      : 'Alle YouTube-Videos ausblenden';
+
+    // Create page-level hide-all button (shown only after consent)
+    const hideAllBar = document.createElement('div');
+    hideAllBar.className = 'yt-page-hide-all';
+    hideAllBar.hidden = true;
+    const hideAllBtn = document.createElement('button');
+    hideAllBtn.className = 'yt-consent-btn yt-consent-btn--secondary';
+    hideAllBtn.type = 'button';
+    hideAllBtn.textContent = hideAllLabel;
+    hideAllBar.appendChild(hideAllBtn);
+    embeds[0].parentNode!.insertBefore(hideAllBar, embeds[0]);
+
+    function updateControls() {
+      let anyLoaded = false;
+      embeds.forEach((embed) => {
+        if (!embed.querySelector('.yt-consent-placeholder')) {
+          anyLoaded = true;
+        }
+      });
+      hideAllBar.hidden = !anyLoaded;
+    }
+
+    function loadEmbed(embed: HTMLElement) {
+      if (!placeholders.has(embed)) {
+        const ph = embed.querySelector('.yt-consent-placeholder');
+        if (ph) placeholders.set(embed, ph.outerHTML);
+      }
+
+      const url = embed.dataset.embedUrl!;
+      const title = embed.dataset.title || 'YouTube-Video';
+
+      const iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.title = title;
+      iframe.setAttribute(
+        'allow',
+        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+      );
+      iframe.setAttribute('allowfullscreen', '');
+
+      const dismiss = document.createElement('button');
+      dismiss.className = 'yt-consent-dismiss';
+      dismiss.type = 'button';
+      dismiss.textContent = 'Video ausblenden';
+      dismiss.addEventListener('click', () => hideEmbed(embed));
+
+      embed.innerHTML = '';
+      embed.appendChild(iframe);
+      embed.appendChild(dismiss);
+    }
+
+    function hideEmbed(embed: HTMLElement) {
+      const html = placeholders.get(embed);
+      if (html) {
+        embed.innerHTML = html;
+        // Re-attach click listener on the restored button
+        const btn = embed.querySelector<HTMLButtonElement>('.yt-consent-btn');
+        if (btn) btn.addEventListener('click', loadAll);
+      }
+      updateControls();
+    }
+
+    function loadAll() {
+      embeds.forEach((embed) => {
+        if (embed.querySelector('.yt-consent-placeholder')) {
+          loadEmbed(embed);
+        }
+      });
+      updateControls();
+    }
+
+    function hideAll() {
+      embeds.forEach((embed) => {
+        if (!embed.querySelector('.yt-consent-placeholder')) {
+          hideEmbed(embed);
+        }
+      });
+      updateControls();
+    }
+
+    // Attach click handlers to all placeholder buttons
+    embeds.forEach((embed) => {
+      const btn = embed.querySelector<HTMLButtonElement>('.yt-consent-btn');
+      if (btn) btn.addEventListener('click', loadAll);
+    });
+
+    hideAllBtn.addEventListener('click', hideAll);
+    updateControls();
+  }
+
+  initYtPageConsent();
+  document.addEventListener('astro:after-swap', initYtPageConsent);
+</script>

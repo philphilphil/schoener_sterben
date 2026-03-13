@@ -1,18 +1,25 @@
 ---
+/**
+ * Backward-compatible wrapper around YouTubeConsentEmbed.
+ * Maps the legacy `id` prop to `videoId`.
+ */
+import YouTubeConsentEmbed from './YouTubeConsentEmbed.astro';
+
 interface Props {
   id: string;
   title?: string;
   start?: number;
+  posterSrc?: string;
+  description?: string;
 }
-const { id, title = 'YouTube Video', start } = Astro.props;
-const src = `https://www.youtube-nocookie.com/embed/${id}${start ? `?start=${start}` : ''}`;
+
+const { id, title, start, posterSrc, description } = Astro.props;
 ---
-<figure class="youtube-embed">
-  <iframe
-    src={src}
-    title={title}
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowfullscreen
-    loading="lazy"
-  ></iframe>
-</figure>
+
+<YouTubeConsentEmbed
+  videoId={id}
+  title={title}
+  start={start}
+  posterSrc={posterSrc}
+  description={description}
+/>
