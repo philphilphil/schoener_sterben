@@ -81,6 +81,10 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 
+html[data-theme="dark"] .masthead-building {
+  filter: invert(1);
+}
+
 html[data-theme] body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
