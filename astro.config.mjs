@@ -3,6 +3,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://schoenersterben.com',
+  site: 'https://schoenersterben.de',
   integrations: [mdx(), sitemap()],
 });

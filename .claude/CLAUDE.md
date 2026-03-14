@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project
 
 "Schöner Sterben" is a German-language opera blog built with Astro 5.x as a static site.
+Live URL: https://schoenersterben.de
 
 ## Commands
 

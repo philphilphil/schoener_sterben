@@ -17,6 +17,7 @@ export async function GET(context: APIContext) {
         pubDate: post.data.date,
         description: post.data.summary || '',
         link: `/posts/${slug}/`,
+        categories: post.data.tags || [],
       };
     }),
   });

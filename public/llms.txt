@@ -1,0 +1,21 @@
+# Schöner Sterben
+
+> Oper für alle!
+
+Schöner Sterben ist ein deutschsprachiger Blog über Oper. Er richtet sich an Neulinge und Interessierte, die ohne Vorwissen und akademischen Ballast einen Zugang zur Oper finden möchten.
+
+## Inhalte
+
+- Opernbesprechungen mit Handlungszusammenfassungen, Hörempfehlungen und Kontext
+- Literarische Ausflüge zu verwandten Themen
+- Opern-FAQ für Einsteiger
+
+## Zugang
+
+- Website: https://schoenersterben.de
+- RSS-Feed: https://schoenersterben.de/rss.xml
+- Sitemap: https://schoenersterben.de/sitemap-0.xml
+
+## Attribution
+
+Autor: Phil Baum

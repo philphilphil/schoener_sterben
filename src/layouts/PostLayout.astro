@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { formatDate } from '../utils/formatDate';
 
 interface Props {
@@ -20,9 +21,39 @@ interface Props {
 const { title, subtitle, date, tags = [], summary, image, imageCaption, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
 
 const formattedDate = formatDate(date);
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://schoenersterben.de';
+const fullTitle = subtitle ? `${title} ${subtitle}` : title;
+const articleUrl = Astro.url.href;
+const articleJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": fullTitle,
+  "description": summary || '',
+  "author": { "@type": "Person", "name": "Phil Baum" },
+  "datePublished": date.toISOString(),
+  "image": image ? `${siteUrl}${image}` : `${siteUrl}/images/og-default.png`,
+  "url": articleUrl,
+  "publisher": {
+    "@type": "Organization",
+    "name": "Schöner Sterben",
+    "url": siteUrl,
+  },
+});
+const breadcrumbJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Startseite", "item": siteUrl },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${siteUrl}/` },
+    { "@type": "ListItem", "position": 3, "name": fullTitle, "item": articleUrl },
+  ],
+});
 ---
-<BaseLayout title={title} description={summary}>
+<BaseLayout title={title} description={summary} image={image} publishedDate={date} tags={tags}>
+  <script type="application/ld+json" set:html={articleJsonLd} />
+  <script type="application/ld+json" set:html={breadcrumbJsonLd} />
   <main class="article-wrapper">
+    <Breadcrumbs items={[{ label: "Blog", href: "/" }, { label: fullTitle, href: articleUrl }]} />
     {!hideMeta && (
       <div class="article-meta">
         {tags.map((tag) => (
@@ -42,7 +73,7 @@ const formattedDate = formatDate(date);
 
     {image && (
       <figure class="article-figure">
-        <img src={image} alt="" class="article-image">
+        <img src={image} alt={imageCaption || title} class="article-image">
         {imageCaption && <figcaption class="article-image-caption">{imageCaption}</figcaption>}
       </figure>
     )}
