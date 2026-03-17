@@ -11,7 +11,7 @@ interface Props {
   tags?: string[];
 }
 
-const { title, description = 'Oper für alle!', image, publishedDate, tags = [] } = Astro.props;
+const { title, description = 'Kurze Texte über Oper', image, publishedDate, tags = [] } = Astro.props;
 const fullTitle = title ? `${title} | Schöner Sterben` : 'Schöner Sterben';
 const currentPath = Astro.url.pathname;
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://schoenersterben.de';

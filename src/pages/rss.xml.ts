@@ -8,7 +8,7 @@ export async function GET(context: APIContext) {
 
   return rss({
     title: 'Schöner Sterben',
-    description: 'Oper für alle!',
+    description: 'Kurze Texte über Oper',
     site: context.site!.toString(),
     items: posts.map((post) => {
       const slug = getPostSlug(post);
