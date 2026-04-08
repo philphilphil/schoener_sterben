@@ -1556,30 +1556,7 @@ hr {
   flex-wrap: wrap;
 }
 
-/* ===== 31. Breadcrumbs ===== */
-.breadcrumbs {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 16px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.breadcrumbs a {
-  font-family: var(--font-ui);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.breadcrumbs a:hover {
-  color: var(--accent);
-}
-
-/* ===== 32. Footer ===== */
+/* ===== 31. Footer ===== */
 .site-footer {
   border-top: 1px solid var(--divider);
   padding: 32px 0;

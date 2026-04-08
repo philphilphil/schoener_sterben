@@ -1,6 +1,5 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { formatDate } from '../utils/formatDate';
 
 interface Props {
@@ -39,21 +38,10 @@ const articleJsonLd = JSON.stringify({
     "url": siteUrl,
   },
 });
-const breadcrumbJsonLd = JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Startseite", "item": siteUrl },
-    { "@type": "ListItem", "position": 2, "name": "Blog", "item": `${siteUrl}/` },
-    { "@type": "ListItem", "position": 3, "name": fullTitle, "item": articleUrl },
-  ],
-});
 ---
 <BaseLayout title={title} description={summary} image={image} publishedDate={date} tags={tags}>
   <script type="application/ld+json" set:html={articleJsonLd} />
-  <script type="application/ld+json" set:html={breadcrumbJsonLd} />
   <main class="article-wrapper">
-    <Breadcrumbs items={[{ label: "Blog", href: "/" }, { label: fullTitle, href: articleUrl }]} />
     {!hideMeta && (
       <div class="article-meta">
         {tags.map((tag) => (
