@@ -27,12 +27,15 @@ No test framework or linter is configured.
 
 ## Content Collections
 
-Single collection `posts` defined in `src/content.config.ts`. Loads all `*.{md,mdx}` from `src/content/` with IDs preserving the path (e.g., `posts/my-post`).
+Two collections in `src/content.config.ts`:
 
-Content lives in `src/content/posts/`.
+- `posts` — `src/content/posts/`, schema validated
+- `pages` — `src/content/pages/` (e.g. `faq.mdx`), passthrough schema
 
-**Required frontmatter**: `title` (string), `date` (date)
-**Optional**: `draft` (bool, default false), `tags` (string[]), `slug`, `summary`, `hideMeta`, `cssclasses`
+Each collection's `generateId` strips only the file extension, so a post's ID is the bare filename (e.g. `verdi-rigoletto-klingt-wie-beim-italiener`), not a path.
+
+**Required post frontmatter**: `title` (string), `date` (date)
+**Optional**: `subtitle`, `draft` (bool, default false), `tags` (string[]), `slug`, `summary`, `image`, `imageCaption`, `hideMeta`, `cssclasses`
 
 Draft posts are excluded from listings/feeds and not built in production.
 
@@ -46,6 +49,7 @@ Available for use in posts — must be explicitly imported with relative paths:
 - `<Handlung>` — Plot summary in a collapsible `<details>` block (open by default)
 - `<YouTube id="..." title="..." start={0} posterSrc="..." description="...">` — Privacy-safe YouTube embed (DSGVO/GDPR compliant). No YouTube resources loaded until user clicks the page-level consent button. All embeds on a page load/unload together via a single controller inserted before the first embed. Individual videos can be hidden via "Video ausblenden". Wraps `YouTubeConsentEmbed`. Optional `posterSrc` for a locally-hosted poster image, `description` for context text.
 - `<Recordings>` + `<Recording>` — Recommended recordings section. Container `<Recordings>` wraps `<Recording>` items. Props for `<Recording>`: `typ` (string badge, e.g. "Audio"), `label` (string), `links` (array of `{name, url}`)
+- `<Score>` — Renders a short ABC-notation snippet as SVG with optional MIDI playback (via `abcjs`). Props: `abc` (string, required), `title` (string), `playback` (bool, default `true`)
 
 Import path from `src/content/posts/`: `../../components/ComponentName.astro`
 
@@ -54,7 +58,7 @@ Import path from `src/content/posts/`: `../../components/ComponentName.astro`
 - `astro.config.mjs` — Site URL, integrations (MDX, sitemap)
 - `src/content.config.ts` — Content collection schema
 - `src/layouts/BaseLayout.astro` — Root HTML shell
-- `src/layouts/PostLayout.astro` — Single post layout with breadcrumbs, meta, prev/next nav
+- `src/layouts/PostLayout.astro` — Single post layout with meta, prev/next nav
 - `src/pages/posts/[...slug].astro` — Individual post rendering
 
 ## MCP Tools
