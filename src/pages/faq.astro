@@ -1,48 +1,16 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { marked } from "marked";
 import { getEntry } from "astro:content";
 
-const faqEntry = await getEntry("pages", "faq");
-const raw = faqEntry!.body!;
-const tokens = marked.lexer(raw);
-
-// Parse h2 = category, h3 = question, following content = answer
-type FaqCategory = { category: string; questions: { q: string; a: string }[] };
-const faqData: FaqCategory[] = [];
-let currentCategory: FaqCategory | null = null;
-let currentQuestion: { q: string; a: string } | null = null;
-const answerTokens: any[] = [];
-
-function flushAnswer() {
-  if (currentQuestion && answerTokens.length > 0) {
-    currentQuestion.a = marked.parser(answerTokens).trim();
-    answerTokens.length = 0;
-  }
-}
-
-for (const token of tokens) {
-  if (token.type === "heading" && token.depth === 2) {
-    flushAnswer();
-    currentQuestion = null;
-    currentCategory = { category: token.text, questions: [] };
-    faqData.push(currentCategory);
-  } else if (token.type === "heading" && token.depth === 3) {
-    flushAnswer();
-    currentQuestion = { q: token.text, a: "" };
-    currentCategory?.questions.push(currentQuestion);
-  } else if (currentQuestion) {
-    answerTokens.push(token);
-  }
-}
-flushAnswer();
+const entry = await getEntry("pages", "faq");
+const faqData = (entry!.data as any).categories;
 
 // Build JSON-LD
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqData.flatMap((cat) =>
-    cat.questions.map((q) => ({
+  mainEntity: faqData.flatMap((cat: any) =>
+    cat.questions.map((q: any) => ({
       "@type": "Question",
       name: q.q,
       acceptedAnswer: { "@type": "Answer", text: q.a.replace(/<[^>]*>/g, "") },
@@ -55,10 +23,10 @@ const jsonLd = {
   <div class="faq-page">
     <div class="faq-body">
       {
-        faqData.map((category) => (
+        faqData.map((category: any) => (
           <section class="faq-category">
             <h2 class="faq-category-title">{category.category}</h2>
-            {category.questions.map((item) => (
+            {category.questions.map((item: any) => (
               <details class="faq-item">
                 <summary>{item.q}</summary>
                 <div class="faq-answer" set:html={item.a} />
