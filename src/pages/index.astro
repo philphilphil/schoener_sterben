@@ -24,7 +24,7 @@ const remainingPosts = posts.slice(4);
             <div class="image-placeholder">Bild</div>
           )}
           {featuredPost.data.tags?.[0] && (
-            <a href={`/tags/${featuredPost.data.tags[0]}/`} class="tag">{featuredPost.data.tags[0]}</a>
+            <a href={`/tags/${featuredPost.data.tags[0].toLowerCase()}/`} class="tag">{featuredPost.data.tags[0]}</a>
           )}
           <h2>
             <a href={`/posts/${getPostSlug(featuredPost)}/`}>
@@ -51,7 +51,7 @@ const remainingPosts = posts.slice(4);
                 <div class="image-placeholder">Bild</div>
               )}
               {post.data.tags?.[0] && (
-                <a href={`/tags/${post.data.tags[0]}/`} class="tag">{post.data.tags[0]}</a>
+                <a href={`/tags/${post.data.tags[0].toLowerCase()}/`} class="tag">{post.data.tags[0]}</a>
               )}
               <h3>
                 <a href={`/posts/${getPostSlug(post)}/`}>
