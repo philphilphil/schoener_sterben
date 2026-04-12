@@ -35,4 +35,27 @@ const posts = defineCollection({
   }),
 });
 
-export const collections = { pages, posts };
+const drafts = defineCollection({
+  loader: glob({
+    pattern: '**/*.{md,mdx}',
+    base: './src/content/drafts',
+    generateId: ({ entry }) => {
+      return entry.replace(/\.mdx?$/, '');
+    },
+  }),
+  schema: z.object({
+    title: z.string().default('Untitled Draft'),
+    subtitle: z.string().optional(),
+    date: z.coerce.date().default(new Date()),
+    draft: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
+    slug: z.string().optional(),
+    summary: z.string().optional().default(''),
+    image: z.string().optional(),
+    imageCaption: z.string().optional(),
+    hideMeta: z.boolean().optional().default(false),
+    cssclasses: z.any().optional(),
+  }).passthrough(),
+});
+
+export const collections = { pages, posts, drafts };

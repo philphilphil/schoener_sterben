@@ -7,6 +7,15 @@ export async function getPublishedPosts() {
   return allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
+export async function getDraftPosts() {
+  try {
+    const drafts = await getCollection('drafts');
+    return drafts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  } catch {
+    return [];
+  }
+}
+
 export async function getTagCounts(): Promise<Map<string, number>> {
   const posts = await getPublishedPosts();
   const tagCounts = new Map<string, number>();

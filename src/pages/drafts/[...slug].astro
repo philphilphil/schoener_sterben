@@ -1,0 +1,42 @@
+---
+import PostLayout from '../../layouts/PostLayout.astro';
+import { render, type CollectionEntry } from 'astro:content';
+import { getDraftPosts } from '../../utils/posts';
+import { estimateReadingTime } from '../../utils/readingTime';
+
+export async function getStaticPaths() {
+  if (!import.meta.env.DEV) return [];
+
+  const drafts = await getDraftPosts();
+  return drafts.map((draft) => {
+    const slug = draft.data.slug || draft.id;
+    return {
+      params: { slug },
+      props: { draft },
+    };
+  });
+}
+
+type Props = {
+  draft: CollectionEntry<'drafts'>;
+};
+
+const { draft } = Astro.props;
+const { Content } = await render(draft);
+---
+<PostLayout
+  title={draft.data.title}
+  subtitle={draft.data.subtitle}
+  date={draft.data.date}
+  tags={draft.data.tags}
+  summary={draft.data.summary}
+  image={draft.data.image}
+  imageCaption={draft.data.imageCaption}
+  readingTime={draft.body ? estimateReadingTime(draft.body) : undefined}
+  draft={true}
+  hideMeta={draft.data.hideMeta}
+  prevPost={null}
+  nextPost={null}
+>
+  <Content />
+</PostLayout>
