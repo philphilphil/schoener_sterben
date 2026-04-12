@@ -1,5 +1,9 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import fs from 'node:fs';
+
+// Ensure drafts directory exists (it's gitignored, may not exist on CI)
+fs.mkdirSync('./src/content/drafts', { recursive: true });
 
 const pages = defineCollection({
   loader: glob({
