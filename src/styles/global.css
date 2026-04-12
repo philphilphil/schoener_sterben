@@ -52,8 +52,8 @@
   --font-ui: 'Outfit', 'Helvetica Neue', sans-serif;
 
   /* Layout */
-  --container-max: 1200px;
-  --article-max: 760px;
+  --container-max: 1400px;
+  --article-max: 860px;
   --content-gap: 24px;
   --radius: 2px;
 
