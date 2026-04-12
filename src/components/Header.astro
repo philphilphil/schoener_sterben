@@ -13,6 +13,10 @@ const menuItems = [
   { name: 'Opern-FAQ', url: '/faq/' },
   { name: 'Über', url: '/about/' },
 ];
+
+if (import.meta.env.DEV && import.meta.env.DRAFTS_PATH) {
+  menuItems.push({ name: 'Drafts', url: '/drafts/' });
+}
 ---
 <header class="site-header">
   <div class="container">

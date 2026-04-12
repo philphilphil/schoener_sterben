@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getDraftPosts } from '../../utils/posts';
+import { estimateReadingTime } from '../../utils/readingTime';
+import { formatDate } from '../../utils/formatDate';
+
+if (!import.meta.env.DEV) {
+  return Astro.redirect('/');
+}
+
+const drafts = await getDraftPosts();
+---
+<BaseLayout title="Drafts" description="Unveröffentlichte Entwürfe">
+  <main>
+    <div class="container">
+      <h1>Drafts</h1>
+      {drafts.length === 0 ? (
+        <p>Keine Entwürfe vorhanden.</p>
+      ) : (
+        <div class="more-posts-list">
+          {drafts.map((draft) => {
+            const readingTime = draft.body ? estimateReadingTime(draft.body) : undefined;
+            const slug = draft.data.slug || draft.id;
+            return (
+              <a href={`/drafts/${slug}/`} class="more-post-item">
+                <span class="more-post-title">{draft.data.title}{draft.data.subtitle && ` ${draft.data.subtitle}`}</span>
+                <span class="more-post-meta">
+                  {formatDate(draft.data.date)}
+                  {readingTime && ` · ${readingTime} Min.`}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </main>
+</BaseLayout>

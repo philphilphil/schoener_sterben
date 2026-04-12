@@ -29,6 +29,9 @@ pnpm-debug.log*
 .claude/audit/
 .claude/review/
 
+# synced drafts from external folder
+src/content/drafts/
+
 # worktrees
 .worktrees/
 .superpowers
