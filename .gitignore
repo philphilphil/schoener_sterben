@@ -29,6 +29,9 @@ pnpm-debug.log*
 .claude/audit/
 .claude/review/
 
+# TTS prep output
+tts_prep_output.md
+
 # synced drafts from external folder
 src/content/drafts/
 
