@@ -2,7 +2,7 @@ import { getCollection } from 'astro:content';
 
 export async function getPublishedPosts() {
   const allPosts = await getCollection('posts', (entry) => {
-    return import.meta.env.DEV || !entry.data.draft;
+    return !entry.data.draft;
   });
   return allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
