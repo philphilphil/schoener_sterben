@@ -11,6 +11,7 @@ interface Props {
   summary?: string;
   image?: string;
   imageCaption?: string;
+  imagePosition?: string;
   readingTime?: number;
   draft?: boolean;
   hideMeta?: boolean;
@@ -19,7 +20,7 @@ interface Props {
   nextPost?: { title: string; href: string } | null;
 }
 
-const { title, subtitle, date, tags = [], summary, image, imageCaption, readingTime, draft = false, hideMeta = false, audioSrc, prevPost, nextPost } = Astro.props;
+const { title, subtitle, date, tags = [], summary, image, imageCaption, imagePosition, readingTime, draft = false, hideMeta = false, audioSrc, prevPost, nextPost } = Astro.props;
 
 const formattedDate = formatDate(date);
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://schoenersterben.de';
@@ -63,7 +64,7 @@ const articleJsonLd = JSON.stringify({
 
     {image && (
       <figure class="article-figure">
-        <img src={image} alt={imageCaption || title} class="article-image">
+        <img src={image} alt={imageCaption || title} class="article-image" style={imagePosition ? `object-position: ${imagePosition}` : undefined}>
         {imageCaption && <figcaption class="article-image-caption">{imageCaption}</figcaption>}
       </figure>
     )}

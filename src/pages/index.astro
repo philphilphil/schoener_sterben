@@ -18,7 +18,7 @@ const remainingPosts = posts.slice(4);
         <article class="featured-main">
           {featuredPost.data.image ? (
             <a href={`/posts/${getPostSlug(featuredPost)}/`}>
-              <img src={featuredPost.data.image} alt="" class="featured-image">
+              <img src={featuredPost.data.image} alt="" class="featured-image" style={featuredPost.data.imagePosition ? `object-position: ${featuredPost.data.imagePosition}` : undefined}>
             </a>
           ) : (
             <div class="image-placeholder">Bild</div>
@@ -45,7 +45,7 @@ const remainingPosts = posts.slice(4);
             <article class="teaser-post">
               {post.data.image ? (
                 <a href={`/posts/${getPostSlug(post)}/`}>
-                  <img src={post.data.image} alt="" class="teaser-image">
+                  <img src={post.data.image} alt="" class="teaser-image" style={post.data.imagePosition ? `object-position: ${post.data.imagePosition}` : undefined}>
                 </a>
               ) : (
                 <div class="image-placeholder">Bild</div>
