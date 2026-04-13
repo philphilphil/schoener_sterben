@@ -35,30 +35,43 @@ Two collections in `src/content.config.ts`:
 Each collection's `generateId` strips only the file extension, so a post's ID is the bare filename (e.g. `verdi-rigoletto-klingt-wie-beim-italiener`), not a path.
 
 **Required post frontmatter**: `title` (string), `date` (date)
-**Optional**: `subtitle`, `draft` (bool, default false), `tags` (string[]), `slug`, `summary`, `image`, `imageCaption`, `hideMeta`, `cssclasses`
+**Optional**: `subtitle`, `draft` (bool, default false), `tags` (string[]), `slug`, `summary`, `image`, `imageCaption`, `imagePosition`, `hideMeta`, `audio`, `recordings` (array of `{typ, label, links: [{name, url}]}`)
 
 Draft posts are excluded from listings/feeds and not built in production.
 
 ## Custom MDX Components
 
-Available for use in posts — must be explicitly imported with relative paths:
+A custom remark plugin (`src/plugins/remark-schoener-sterben.mjs`) auto-transforms directive syntax and bare YouTube URLs into JSX components, injecting imports automatically. **No manual imports needed** for the following:
 
-- `<TLDR>` — "Why you should listen to this" aside
-- `<Spoiler title="...">` — Collapsed spoiler block
-- `<Collapse summary="..." openByDefault={false}>` — Generic collapsible
-- `<Handlung>` — Plot summary in a collapsible `<details>` block (open by default)
-- `<YouTube id="..." title="..." start={0} posterSrc="..." description="...">` — Privacy-safe YouTube embed (DSGVO/GDPR compliant). No YouTube resources loaded until user clicks the page-level consent button. All embeds on a page load/unload together via a single controller inserted before the first embed. Individual videos can be hidden via "Video ausblenden". Wraps `YouTubeConsentEmbed`. Optional `posterSrc` for a locally-hosted poster image, `description` for context text.
-- `<Recordings>` + `<Recording>` — Recommended recordings section. Container `<Recordings>` wraps `<Recording>` items. Props for `<Recording>`: `typ` (string badge, e.g. "Audio"), `label` (string), `links` (array of `{name, url}`)
-- `<Score>` — Renders a short ABC-notation snippet as SVG with optional MIDI playback (via `abcjs`). Props: `abc` (string, required), `title` (string), `playback` (bool, default `true`)
+### Directive syntax (via `remark-directive`)
 
-Import path from `src/content/posts/`: `../../components/ComponentName.astro`
+- `:::tldr` — "Why you should listen to this" aside
+- `:::handlung` — Plot summary in a collapsible `<details>` block (open by default). Optional title: `:::handlung[Custom Title]` (default: "Der Plot")
+- `:::spoiler[title]` — Collapsed spoiler block
+- `:::collapse[summary]` — Generic collapsible
+- `:::score[title]` — ABC-notation snippet as SVG with optional MIDI playback (via `abcjs`). Body text = `abc` prop.
+
+### Auto-embedded YouTube
+
+Bare YouTube URLs on their own line (e.g. `https://youtu.be/abc123`) are auto-converted to privacy-safe `<YouTube>` embeds (DSGVO/GDPR compliant). No YouTube resources loaded until user clicks the page-level consent button.
+
+For advanced props (`start`, `posterSrc`, `description`), use explicit JSX: `<YouTube id="..." start={0} posterSrc="..." description="..." />`
+
+### Recordings (frontmatter, not MDX body)
+
+`<Recordings>` + `<Recording>` are rendered automatically by `PostLayout.astro` from the `recordings` frontmatter field. Do **not** import them in MDX.
+
+### Explicit imports (only when needed)
+
+Components can still be explicitly imported for advanced use. Import path from `src/content/posts/`: `../../components/ComponentName.astro`
 
 ## Key Files
 
-- `astro.config.mjs` — Site URL, integrations (MDX, sitemap)
-- `src/content.config.ts` — Content collection schema
+- `astro.config.mjs` — Site URL, integrations (MDX, sitemap), remark plugins
+- `src/content.config.ts` — Content collection schemas + shared `Recording` type
+- `src/plugins/remark-schoener-sterben.mjs` — Custom remark plugin (directives → JSX, YouTube URLs → embeds)
 - `src/layouts/BaseLayout.astro` — Root HTML shell
-- `src/layouts/PostLayout.astro` — Single post layout with meta, prev/next nav
+- `src/layouts/PostLayout.astro` — Single post layout with meta, recordings, prev/next nav
 - `src/pages/posts/[...slug].astro` — Individual post rendering
 
 ## MCP Tools

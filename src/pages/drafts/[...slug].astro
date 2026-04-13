@@ -35,6 +35,8 @@ const { Content } = await render(draft);
   readingTime={draft.body ? estimateReadingTime(draft.body) : undefined}
   draft={true}
   hideMeta={draft.data.hideMeta}
+  audioSrc={draft.data.audio}
+  recordings={draft.data.recordings}
   prevPost={null}
   nextPost={null}
 >

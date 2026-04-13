@@ -1,6 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import AudioPlayer from '../components/AudioPlayer.astro';
+import Recordings from '../components/Recordings.astro';
+import Recording from '../components/Recording.astro';
 import { formatDate } from '../utils/formatDate';
 
 interface Props {
@@ -16,11 +18,12 @@ interface Props {
   draft?: boolean;
   hideMeta?: boolean;
   audioSrc?: string;
+  recordings?: import('../content.config').Recording;
   prevPost?: { title: string; href: string } | null;
   nextPost?: { title: string; href: string } | null;
 }
 
-const { title, subtitle, date, tags = [], summary, image, imageCaption, imagePosition, readingTime, draft = false, hideMeta = false, audioSrc, prevPost, nextPost } = Astro.props;
+const { title, subtitle, date, tags = [], summary, image, imageCaption, imagePosition, readingTime, draft = false, hideMeta = false, audioSrc, recordings, prevPost, nextPost } = Astro.props;
 
 const formattedDate = formatDate(date);
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://schoenersterben.de';
@@ -72,6 +75,13 @@ const articleJsonLd = JSON.stringify({
     <div class="post-content" data-pagefind-body>
       {audioSrc && <AudioPlayer src={audioSrc} />}
       <slot />
+      {recordings && recordings.length > 0 && (
+        <Recordings>
+          {recordings.map((rec) => (
+            <Recording typ={rec.typ} label={rec.label} links={rec.links} />
+          ))}
+        </Recordings>
+      )}
     </div>
 
     <footer class="post-footer">

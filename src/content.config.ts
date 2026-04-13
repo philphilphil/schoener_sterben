@@ -2,6 +2,17 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import fs from 'node:fs';
 
+const recordingSchema = z.array(z.object({
+  typ: z.string(),
+  label: z.string(),
+  links: z.array(z.object({
+    name: z.string(),
+    url: z.string(),
+  })),
+})).optional();
+
+export type Recording = z.infer<typeof recordingSchema>;
+
 // Ensure drafts directory exists (it's gitignored, may not exist on CI)
 fs.mkdirSync('./src/content/drafts', { recursive: true });
 
@@ -37,7 +48,7 @@ const posts = defineCollection({
     imageCaption: z.string().optional(),
     imagePosition: z.string().optional(),
     hideMeta: z.boolean().optional().default(false),
-    cssclasses: z.array(z.string()).optional(),
+    recordings: recordingSchema,
   }),
 });
 
@@ -62,7 +73,7 @@ const drafts = defineCollection({
     imageCaption: z.string().optional(),
     imagePosition: z.string().optional(),
     hideMeta: z.boolean().optional().default(false),
-    cssclasses: z.any().optional(),
+    recordings: recordingSchema,
   }).passthrough(),
 });
 
