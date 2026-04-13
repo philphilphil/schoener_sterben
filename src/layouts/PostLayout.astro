@@ -68,9 +68,8 @@ const articleJsonLd = JSON.stringify({
       </figure>
     )}
 
-    {audioSrc && <AudioPlayer src={audioSrc} />}
-
     <div class="post-content" data-pagefind-body>
+      {audioSrc && <AudioPlayer src={audioSrc} />}
       <slot />
     </div>
 
