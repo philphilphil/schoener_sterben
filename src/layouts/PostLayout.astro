@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import AudioPlayer from '../components/AudioPlayer.astro';
 import { formatDate } from '../utils/formatDate';
 
 interface Props {
@@ -13,11 +14,12 @@ interface Props {
   readingTime?: number;
   draft?: boolean;
   hideMeta?: boolean;
+  audioSrc?: string;
   prevPost?: { title: string; href: string } | null;
   nextPost?: { title: string; href: string } | null;
 }
 
-const { title, subtitle, date, tags = [], summary, image, imageCaption, readingTime, draft = false, hideMeta = false, prevPost, nextPost } = Astro.props;
+const { title, subtitle, date, tags = [], summary, image, imageCaption, readingTime, draft = false, hideMeta = false, audioSrc, prevPost, nextPost } = Astro.props;
 
 const formattedDate = formatDate(date);
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://schoenersterben.de';
@@ -65,6 +67,8 @@ const articleJsonLd = JSON.stringify({
         {imageCaption && <figcaption class="article-image-caption">{imageCaption}</figcaption>}
       </figure>
     )}
+
+    {audioSrc && <AudioPlayer src={audioSrc} />}
 
     <div class="post-content" data-pagefind-body>
       <slot />

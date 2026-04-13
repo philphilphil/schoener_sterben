@@ -41,10 +41,20 @@ export default function draftsIntegration(draftsPath: string): AstroIntegration 
     hooks: {
       'astro:config:setup'({ command, addWatchFile, logger }) {
         const destDir = path.resolve(DRAFTS_CONTENT_DIR);
+
+        if (command !== 'dev') {
+          // Clear drafts folder for build so leftover synced files don't break it
+          if (fs.existsSync(destDir)) {
+            for (const file of fs.readdirSync(destDir)) {
+              fs.unlinkSync(path.join(destDir, file));
+            }
+          }
+          return;
+        }
         syncDrafts(resolvedSource, destDir);
         logger.info(`Synced drafts from ${resolvedSource}`);
 
-        if (command === 'dev') {
+        {
           // Watch the external drafts folder for changes
           try {
             const watcher = fs.watch(resolvedSource, (_event, filename) => {

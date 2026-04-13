@@ -4,6 +4,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import { getPublishedPosts } from '../../utils/posts';
 import { estimateReadingTime } from '../../utils/readingTime';
 import { getPostSlug } from '../../utils/getPostSlug';
+import fs from 'node:fs';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -30,6 +31,9 @@ type Props = {
 };
 const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
+const slug = getPostSlug(post);
+const audioFile = `/audio/${slug}.mp3`;
+const hasAudio = fs.existsSync(`public${audioFile}`);
 ---
 <PostLayout
   title={post.data.title}
@@ -42,6 +46,7 @@ const { Content } = await render(post);
   readingTime={post.body ? estimateReadingTime(post.body) : undefined}
   draft={post.data.draft}
   hideMeta={post.data.hideMeta}
+  audioSrc={hasAudio ? audioFile : undefined}
   prevPost={prevPost}
   nextPost={nextPost}
 >
