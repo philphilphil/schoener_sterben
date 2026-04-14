@@ -38,3 +38,6 @@ src/content/drafts/
 # worktrees
 .worktrees/
 .superpowers
+
+#python
+__pycache__/
