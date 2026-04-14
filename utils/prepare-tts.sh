@@ -13,7 +13,7 @@ if [ ! -f "$FILE" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-OUTPUT="$SCRIPT_DIR/../tts_prep_output.md"
+OUTPUT="$SCRIPT_DIR/tts_prep_output.md"
 
 SYSTEM_PROMPT='You prepare German blog posts about opera for text-to-speech narration.
 
