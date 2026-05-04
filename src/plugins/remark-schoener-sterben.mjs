@@ -60,6 +60,32 @@ function flattenText(node) {
   return '';
 }
 
+/** Escape a string for safe insertion into a template literal expression */
+function escapeTemplateLiteral(value) {
+  return value.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
+}
+
+/** Extract the raw body text from a container directive in the source document */
+function extractRawDirectiveBody(node, file) {
+  const source = String(file?.value ?? '');
+  const start = node.position?.start?.offset;
+  const end = node.position?.end?.offset;
+
+  if (typeof start !== 'number' || typeof end !== 'number' || !source) {
+    return null;
+  }
+
+  const rawDirective = source.slice(start, end);
+  const lines = rawDirective.split(/\r?\n/);
+  if (lines.length < 2) return '';
+
+  const lastBodyLine = /^:{3,}\s*$/.test(lines.at(-1) ?? '')
+    ? lines.length - 1
+    : lines.length;
+
+  return lines.slice(1, lastBodyLine).join('\n').trimEnd();
+}
+
 /** Create an mdxJsxAttribute node */
 function jsxAttr(name, value) {
   return { type: 'mdxJsxAttribute', name, value };
@@ -107,21 +133,17 @@ function transformWrapperDirective(node, componentName, propMapping) {
 }
 
 /** Convert a :::score directive to a self-closing <Score /> element */
-function transformScoreDirective(node) {
+function transformScoreDirective(node, file) {
   const label = extractLabel(node);
 
-  // Collect all text content from body as the abc notation string
-  const abcLines = [];
-  for (const child of node.children) {
-    abcLines.push(flattenText(child));
-  }
-  const abc = abcLines.join('\n');
+  const rawBody = extractRawDirectiveBody(node, file);
+  const abc = rawBody ?? node.children.map(flattenText).join('\n');
 
   const attributes = [];
   if (label) {
     attributes.push(jsxAttr('title', label));
   }
-  attributes.push(jsxExprAttr('abc', '`' + abc + '`'));
+  attributes.push(jsxExprAttr('abc', '`' + escapeTemplateLiteral(abc) + '`'));
 
   node.type = 'mdxJsxFlowElement';
   node.name = 'Score';
@@ -161,7 +183,7 @@ function transformYouTubeParagraph(node) {
 }
 
 export function remarkSchoenerSterben() {
-  return (tree) => {
+  return (tree, file) => {
     const usedImports = new Set();
 
     visit(tree, (node) => {
@@ -173,7 +195,7 @@ export function remarkSchoenerSterben() {
         usedImports.add(directive.import);
 
         if (node.name === 'score') {
-          transformScoreDirective(node);
+          transformScoreDirective(node, file);
         } else if (node.name === 'tldr') {
           transformWrapperDirective(node, directive.component, null);
         } else if (node.name === 'handlung') {
