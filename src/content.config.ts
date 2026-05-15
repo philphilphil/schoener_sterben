@@ -13,8 +13,14 @@ const recordingSchema = z.array(z.object({
 
 export type Recording = z.infer<typeof recordingSchema>;
 
-// Ensure drafts directory exists (it's gitignored, may not exist on CI)
-fs.mkdirSync('./src/content/drafts', { recursive: true });
+const isDev = process.env.NODE_ENV !== 'production';
+
+// Drafts only exist in dev (the integration clears the dir on build).
+// Without registering them conditionally, the glob loader warns on every
+// production build about the empty directory.
+if (isDev) {
+  fs.mkdirSync('./src/content/drafts', { recursive: true });
+}
 
 const pages = defineCollection({
   loader: glob({
@@ -42,7 +48,7 @@ const posts = defineCollection({
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
     slug: z.string().optional(),
-    summary: z.string().optional().default(''),
+    summary: z.string().nullish().transform((v) => v ?? ''),
     audio: z.string().optional(),
     image: z.string().optional(),
     imageCaption: z.string().optional(),
@@ -67,7 +73,7 @@ const drafts = defineCollection({
     draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
     slug: z.string().optional(),
-    summary: z.string().optional().default(''),
+    summary: z.string().nullish().transform((v) => v ?? ''),
     audio: z.string().optional(),
     image: z.string().optional(),
     imageCaption: z.string().optional(),
@@ -77,4 +83,6 @@ const drafts = defineCollection({
   }).passthrough(),
 });
 
-export const collections = { pages, posts, drafts };
+export const collections = isDev
+  ? { pages, posts, drafts }
+  : { pages, posts };
