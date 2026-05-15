@@ -41,3 +41,6 @@ src/content/drafts/
 
 #python
 __pycache__/
+
+# Affinity Photo lock files
+*.afphoto~lock~
